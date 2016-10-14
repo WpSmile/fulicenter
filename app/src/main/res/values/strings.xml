@@ -1,7 +1,12 @@
 <resources>
-    <string name="app_name">福利社</string>
+    <string name="app_name">fulicenter</string>
     <string name="Version_number_is_wrong">Version number is wrong</string>
     <string name="now_refresh">now_refresh</string>
     <string name="no_more">no more</string>
     <string name="load_more">load more</string>
+    <string name="new_goods">新品</string>
+    <string name="boutique">精选</string>
+    <string name="item_category">分类</string>
+    <string name="item_cart">购物车</string>
+    <string name="person">我</string>
 </resources>

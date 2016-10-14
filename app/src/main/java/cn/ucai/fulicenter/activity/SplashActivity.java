@@ -1,6 +1,7 @@
 package cn.ucai.fulicenter.activity;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -19,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        new Thread(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
 
@@ -39,6 +40,6 @@ public class SplashActivity extends AppCompatActivity {
                 /*startActivity(new Intent(SplashActivity.this,MainActivity.class));
                 finish();*/
             }
-        }).start();
+        },splashTime);
     }
 }

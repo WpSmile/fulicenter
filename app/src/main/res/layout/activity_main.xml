@@ -1,16 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="cn.ucai.fulicenter.MainActivity">
+    android:background="@color/list_background">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+
+    <LinearLayout
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/bottom_bar_taobao_bg">
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
+
+            <RadioButton
+                android:id="@+id/new_goods"
+                android:button="@null"
+                android:drawableTop="@drawable/selector_menu_item_new_good"
+                android:gravity="center_horizontal"
+                android:text="@string/new_goods"
+                android:checked="true"
+                style="@style/menu_item_style"
+                android:textColor="@color/main_botton_text_color"
+                />
+            <RadioButton
+                android:id="@+id/boutique"
+                android:button="@null"
+                android:drawableTop="@drawable/selector_menu_item_boutique"
+                android:gravity="center_horizontal"
+                android:text="@string/boutique"
+                android:checked="false"
+                style="@style/menu_item_style"
+                android:textColor="@color/main_botton_text_color"/>
+            <RadioButton
+                android:id="@+id/item_category"
+                android:button="@null"
+                android:drawableTop="@drawable/selector_menu_item_category"
+                android:gravity="center_horizontal"
+                android:text="@string/item_category"
+                android:checked="false"
+                style="@style/menu_item_style"
+                android:textColor="@color/main_botton_text_color"/>
+            <RelativeLayout
+                style="@style/style_menu_item">
+                <RadioButton
+                    android:id="@+id/item_cart"
+                    android:button="@null"
+                    android:drawableTop="@drawable/selector_menu_item_cart"
+                    android:text="@string/item_cart"
+                    android:checked="false"
+                    style="@style/menu_item_style_cart"
+                    android:textColor="@color/main_botton_text_color"/>
+                <LinearLayout
+                    android:id="@+id/line2"
+                    android:layout_width="55dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/cart_hint"
+                        android:layout_marginLeft="15dp"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:paddingLeft="50dp"
+                        android:text="1300"
+                        android:textColor="#fff"
+                        android:textSize="12dp"
+                        android:visibility="gone"/>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RadioButton
+                android:id="@+id/person"
+                android:button="@null"
+                android:drawableTop="@drawable/selector_menu_item_personal_center"
+                android:gravity="center_horizontal"
+                android:text="@string/person"
+                android:checked="false"
+                style="@style/menu_item_style"
+                android:textColor="@color/main_botton_text_color"/>
+        </RadioGroup>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/vline"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_above="@+id/line1"
+        android:background="#D6DCDC"/>
+    <RelativeLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="1dp"
+        android:layout_above="@+id/vline"/>
+
+
 </RelativeLayout>
