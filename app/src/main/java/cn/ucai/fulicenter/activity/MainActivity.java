@@ -10,7 +10,9 @@ import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.utils.L;
 
 public class MainActivity extends AppCompatActivity {
+
     RadioButton mNewGoods,mBoutique,mCategory,mCart,mPersonal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         mCart = (RadioButton) findViewById(R.id.item_cart);
         mPersonal = (RadioButton) findViewById(R.id.person);
     }
+
     public void onCheckedChange(View view){
         switch (view.getId()){
             case R.id.new_goods:
