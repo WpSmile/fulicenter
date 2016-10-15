@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         mCart = (RadioButton) findViewById(R.id.item_cart);
         mPersonal = (RadioButton) findViewById(R.id.person);
     }
-
     public void onCheckedChange(View view){
         switch (view.getId()){
             case R.id.new_goods:
