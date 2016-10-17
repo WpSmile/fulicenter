@@ -47,20 +47,9 @@ public class MainActivity extends AppCompatActivity {
         rbs[3] = itemCart;
         rbs[4] = person;
 
-        setRadioButtonStatus();
+
         //setDefaultFragment();
     }
-
-    private void setRadioButtonStatus() {
-        for (int i=0;i<rbs.length;i++){
-            if (index == i){
-                rbs[i].setChecked(true);
-            }else{
-                rbs[i].setChecked(false);
-            }
-        }
-    }
-
     /*private void setDefaultFragment() {
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -93,6 +82,16 @@ public class MainActivity extends AppCompatActivity {
             case R.id.person:
                 index = 4;
                 break;
+        }
+        setRadioButtonStatus();
+    }
+    private void setRadioButtonStatus() {
+        for (int i=0;i<rbs.length;i++){
+            if (index == i){
+                rbs[i].setChecked(true);
+            }else{
+                rbs[i].setChecked(false);
+            }
         }
     }
 

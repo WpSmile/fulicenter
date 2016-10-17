@@ -14,16 +14,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
+
 
 import java.util.ArrayList;
 
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
-import cn.ucai.fulicenter.bean.Result;
+
 import cn.ucai.fulicenter.utils.ImageLoader;
-import cn.ucai.fulicenter.utils.L;
+
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 
 /**
@@ -61,6 +61,19 @@ public class NewGoodsFragment extends Fragment {
         mrvNewGoods.setAdapter(mAdapter);
         mrvNewGoods.setLayoutManager(mgridLayoutManager);
         setListener();
+
+        mgridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return position==mAdapter.getItemCount()-1?2:1;
+            }
+        });
+        //判断最后，网格布局两行合并变一行
+        if (Page_id==1){
+            downloadNewGoods(I.ACTION_DOWNLOAD,Page_id);
+        }else {
+            setPullUpListener();//上拉加载
+        }
         return view;
     }
 
@@ -133,6 +146,14 @@ public class NewGoodsFragment extends Fragment {
                                     break;
                                 case I.ACTION_PULL_UP:
                                     mAdapter.addGoods(goodslist);
+                                    break;
+                                case I.ACTION_PULL_DOWN:
+                                    mAdapter.initGoods(goodslist);
+                                    mAdapter.setFooter("加载更多数据");
+                                    //  mSwipeRefreshLayout.setEnabled(false);
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                    mtvRefresh.setVisibility(View.GONE);
+                                    ImageLoader.release();
                                     break;
                             }
                         }
@@ -256,23 +277,24 @@ public class NewGoodsFragment extends Fragment {
 
             NewGoodsHolder newGoodsHolder = (NewGoodsHolder) holder;
             NewGoodsBean goods = mNewGoodsList.get(position);
-            newGoodsHolder.mtvGoodsName.setText("" + goods.getGoodsName());
-            newGoodsHolder.mtvGoodsPrice.setText("" + goods.getCurrencyPrice());
+            newGoodsHolder.mtvGoodsName.setText(goods.getGoodsName());
+            newGoodsHolder.mtvGoodsPrice.setText(goods.getCurrencyPrice());
 
             ImageLoader.build(I.SERVER_ROOT + I.REQUEST_DOWNLOAD_IMAGE)
                     .addParam(I.IMAGE_URL, goods.getGoodsImg())
                     .defaultPicture(R.drawable.nopic)
-                    .width(100)
-                    .height(100)
+                    .width(150)
+                    .height(150)
                     .imageView(newGoodsHolder.mivGoodsPicture)
                     .listener(parent)
+                    .saveFileName(goods.getGoodsName())
                     .setDragging(mNewState!=RecyclerView.SCROLL_STATE_DRAGGING)
                     .showImage(context);
         }
 
         @Override
         public int getItemCount() {
-            return newGoodsList == null ? 0 : newGoodsList.size() + 1;
+            return newGoodsList == null ? 1 : newGoodsList.size() + 1;
         }
 
         @Override
@@ -281,8 +303,6 @@ public class NewGoodsFragment extends Fragment {
                 return I.TYPE_FOOTER;
             }
                 return I.TYPE_ITEM;
-
-
         }
     }
 
