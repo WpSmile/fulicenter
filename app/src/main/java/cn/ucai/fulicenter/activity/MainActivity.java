@@ -10,12 +10,20 @@ import android.widget.RadioButton;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.fragments.BoutiqueFragment;
+import cn.ucai.fulicenter.fragments.CartFragment;
+import cn.ucai.fulicenter.fragments.CategoryFragment;
 import cn.ucai.fulicenter.fragments.NewGoodsFragment;
+import cn.ucai.fulicenter.fragments.PersonalFragment;
 import cn.ucai.fulicenter.utils.L;
 
 public class MainActivity extends AppCompatActivity {
 
     NewGoodsFragment newGoodsFragment;
+    BoutiqueFragment boutiqueFragment;
+    CategoryFragment categoryFragment;
+    CartFragment cartFragment;
+    PersonalFragment personalFragment;
     @Bind(R.id.new_goods)
     RadioButton newGoods;
     @Bind(R.id.boutique)
@@ -29,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     int index;
     RadioButton[] rbs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,49 +56,71 @@ public class MainActivity extends AppCompatActivity {
         rbs[3] = itemCart;
         rbs[4] = person;
 
-
-        //setDefaultFragment();
+        //设置默认的主页
+        setDefaultFragment();
     }
-    /*private void setDefaultFragment() {
+    private void setDefaultFragment() {
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         newGoodsFragment = new NewGoodsFragment();
-        transaction.replace(R.id.mainLayout,newGoodsFragment);
+        transaction.replace(R.id.fragment_container,newGoodsFragment);
         transaction.commit();
-    }*/
+    }
 
     public void onCheckedChange(View view) {
         FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
         switch (view.getId()) {
             case R.id.new_goods:
                 index = 0;
-                newGoodsFragment = new NewGoodsFragment();
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.mainLayout, newGoodsFragment);
+                if (newGoodsFragment == null) {
+                    newGoodsFragment = new NewGoodsFragment();
+                }
+                transaction.replace(R.id.fragment_container, newGoodsFragment);
                 transaction.addToBackStack("stack");
-                transaction.commit();
-
                 break;
             case R.id.boutique:
                 index = 1;
+                if (boutiqueFragment == null) {
+                    boutiqueFragment = new BoutiqueFragment();
+                }
+                transaction.replace(R.id.fragment_container, boutiqueFragment);
+                transaction.addToBackStack("stack");
                 break;
             case R.id.item_category:
                 index = 2;
+                if (categoryFragment == null){
+                    categoryFragment = new CategoryFragment();
+                }
+                transaction.replace(R.id.fragment_container,categoryFragment);
+                transaction.addToBackStack("stack");
                 break;
             case R.id.item_cart:
+                if (cartFragment == null){
+                    cartFragment = new CartFragment();
+                }
+                transaction.replace(R.id.fragment_container,cartFragment);
+                transaction.addToBackStack("stack");
                 index = 3;
                 break;
             case R.id.person:
                 index = 4;
+                if (personalFragment == null){
+                    personalFragment = new PersonalFragment();
+                }
+                transaction.replace(R.id.fragment_container,personalFragment);
+                transaction.addToBackStack("stack");
                 break;
         }
         setRadioButtonStatus();
+        transaction.commit();
     }
+
     private void setRadioButtonStatus() {
-        for (int i=0;i<rbs.length;i++){
-            if (index == i){
+        for (int i = 0; i < rbs.length; i++) {
+            if (index == i) {
                 rbs[i].setChecked(true);
-            }else{
+            } else {
                 rbs[i].setChecked(false);
             }
         }

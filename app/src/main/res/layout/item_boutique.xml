@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivGoodsImage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/nopic"/>
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_toRightOf="@+id/ivGoodsImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="商品标题"
+        android:textSize="20sp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:textColor="#FFE82816"
+        />
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="商品描述"
+        android:textSize="20sp"
+        android:layout_below="@+id/tvTitle"
+        android:layout_toRightOf="@+id/ivGoodsImage"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:textColor="#FF090A0C"/>
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="商品名称"
+        android:textSize="20sp"
+        android:layout_below="@+id/tvDescription"
+        android:layout_toRightOf="@+id/ivGoodsImage"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        />
+</RelativeLayout>

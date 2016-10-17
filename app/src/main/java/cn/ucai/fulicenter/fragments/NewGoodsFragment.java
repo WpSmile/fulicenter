@@ -53,12 +53,14 @@ public class NewGoodsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_goods, container, false);
         mNewGoodsList = new ArrayList<>();
-        mgridLayoutManager = new GridLayoutManager(getContext(),2,LinearLayoutManager.VERTICAL,false);
+        mgridLayoutManager = new GridLayoutManager(getContext(),I.COLUM_NUM,LinearLayoutManager.VERTICAL,false);
         mAdapter = new NewGoodsAdapter(getActivity(),mNewGoodsList);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl);
         mtvRefresh = (TextView) view.findViewById(R.id.tvRefresh);
         mrvNewGoods = (RecyclerView) view.findViewById(R.id.rvNewGoods);
         mrvNewGoods.setAdapter(mAdapter);
+        //设置是否自动修复
+        mrvNewGoods.setHasFixedSize(true);
         mrvNewGoods.setLayoutManager(mgridLayoutManager);
         setListener();
 
@@ -98,7 +100,7 @@ public class NewGoodsFragment extends Fragment {
                 if (lastPosition >= mAdapter.getItemCount() - 1
                         && newState == RecyclerView.SCROLL_STATE_IDLE
                         && mAdapter.isMore()) {
-                    Page_id++;
+                    Page_id+=1;
                     downloadNewGoods(I.ACTION_PULL_UP, Page_id);
                 }
 
@@ -280,7 +282,7 @@ public class NewGoodsFragment extends Fragment {
             newGoodsHolder.mtvGoodsName.setText(goods.getGoodsName());
             newGoodsHolder.mtvGoodsPrice.setText(goods.getCurrencyPrice());
 
-            ImageLoader.build(I.SERVER_ROOT + I.REQUEST_DOWNLOAD_IMAGE)
+            /*ImageLoader.build(I.SERVER_ROOT + I.REQUEST_DOWNLOAD_IMAGE)
                     .addParam(I.IMAGE_URL, goods.getGoodsImg())
                     .defaultPicture(R.drawable.nopic)
                     .width(150)
@@ -289,7 +291,8 @@ public class NewGoodsFragment extends Fragment {
                     .listener(parent)
                     .saveFileName(goods.getGoodsName())
                     .setDragging(mNewState!=RecyclerView.SCROLL_STATE_DRAGGING)
-                    .showImage(context);
+                    .showImage(context);*/
+            ImageLoader.downloadImg(context,newGoodsHolder.mivGoodsPicture,goods.getGoodsThumb());
         }
 
         @Override

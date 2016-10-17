@@ -6,12 +6,13 @@
     android:background="@color/list_background"
     >
 
-    <fragment
+    <!--<fragment
         android:id="@+id/GridLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="cn.ucai.fulicenter.fragments.NewGoodsFragment"
-        />
+        />-->
+
     <LinearLayout
         android:id="@+id/line1"
         android:layout_width="match_parent"
