@@ -2,6 +2,7 @@ package cn.ucai.fulicenter.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,21 +14,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.adapter.GoodsAdapter;
+import cn.ucai.fulicenter.activity.GoodsChildActivity;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
-import cn.ucai.fulicenter.net.NetDao;
-import cn.ucai.fulicenter.utils.CommonUtils;
-import cn.ucai.fulicenter.utils.ConvertUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
-import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import cn.ucai.fulicenter.view.SpaceItemDecoration;
 
@@ -67,7 +66,7 @@ public class NewGoodsFragment extends Fragment {
         ButterKnife.bind(this, view);
         mNewGoodsList = new ArrayList<>();
         //adapter = new GoodsAdapter(getActivity(), mNewGoodsList);
-        mAdapter = new NewGoodsAdapter(getContext(),mNewGoodsList);
+        mAdapter = new NewGoodsAdapter(getContext(), mNewGoodsList);
         Goodsrl.setColorSchemeColors(
                 getResources().getColor(R.color.google_blue),
                 getResources().getColor(R.color.google_green),
@@ -235,12 +234,21 @@ public class NewGoodsFragment extends Fragment {
     class NewGoodsHolder extends RecyclerView.ViewHolder {
         ImageView mivGoodsPicture;
         TextView mtvGoodsName, mtvGoodsPrice;
+        @Bind(R.id.llNewGoods)
+        LinearLayout llNewGoods;
 
         public NewGoodsHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this,itemView);
             mivGoodsPicture = (ImageView) itemView.findViewById(R.id.ivGoodsPicture);
             mtvGoodsName = (TextView) itemView.findViewById(R.id.tvGoodsName);
             mtvGoodsPrice = (TextView) itemView.findViewById(R.id.tvGoodsPrice);
+        }
+        @OnClick(R.id.llNewGoods)
+        public void onClick() {
+            int goodsId = (int) llNewGoods.getTag();
+            getContext().startActivity(new Intent(getContext(), GoodsChildActivity.class)
+            .putExtra(I.GoodsDetails.KEY_GOODS_ID,goodsId));
         }
     }
 
@@ -265,6 +273,7 @@ public class NewGoodsFragment extends Fragment {
 
         String footer;
         RecyclerView parent;
+
 
         public String getFooter() {
             return footer;
@@ -342,8 +351,9 @@ public class NewGoodsFragment extends Fragment {
             NewGoodsBean goods = mNewGoodsList.get(position);
             newGoodsHolder.mtvGoodsName.setText(goods.getGoodsName());
             newGoodsHolder.mtvGoodsPrice.setText(goods.getCurrencyPrice());
-
             ImageLoader.downloadImg(context, newGoodsHolder.mivGoodsPicture, goods.getGoodsThumb());
+
+            newGoodsHolder.llNewGoods.setTag(goods.getGoodsId());
         }
 
         @Override
@@ -358,6 +368,7 @@ public class NewGoodsFragment extends Fragment {
             }
             return I.TYPE_ITEM;
         }
+
 
 
     }
