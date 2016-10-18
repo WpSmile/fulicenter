@@ -1,6 +1,7 @@
 package cn.ucai.fulicenter.fragments;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.activity.GoodsChildActivity;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
 import cn.ucai.fulicenter.utils.ImageLoader;
+import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import cn.ucai.fulicenter.view.SpaceItemDecoration;
 
@@ -247,8 +249,7 @@ public class NewGoodsFragment extends Fragment {
         @OnClick(R.id.llNewGoods)
         public void onClick() {
             int goodsId = (int) llNewGoods.getTag();
-            getContext().startActivity(new Intent(getContext(), GoodsChildActivity.class)
-            .putExtra(I.GoodsDetails.KEY_GOODS_ID,goodsId));
+            MFGT.gotoGoodsChildActivity((Activity) getContext(),goodsId);
         }
     }
 
