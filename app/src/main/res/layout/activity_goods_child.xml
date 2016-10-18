@@ -94,12 +94,13 @@
                 android:textColor="#FFE65F12"/>
         </RelativeLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPager"
+        <cn.ucai.fulicenter.view.SlideAutoLoopView
+            android:id="@+id/slideAutoLoopView"
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="200dp"
+            >
 
-        </android.support.v4.view.ViewPager>
+        </cn.ucai.fulicenter.view.SlideAutoLoopView>
 
         <cn.ucai.fulicenter.view.FlowIndicator
             android:id="@+id/myView"
@@ -112,8 +113,6 @@
             app:normal_color="#fff"
             app:focus_color="#FF5300"
             app:focus="0" />
-
-
 
 
         <TextView
