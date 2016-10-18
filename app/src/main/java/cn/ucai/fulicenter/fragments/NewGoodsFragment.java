@@ -24,10 +24,12 @@ import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.adapter.GoodsAdapter;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
 import cn.ucai.fulicenter.net.NetDao;
+import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.ConvertUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
+import cn.ucai.fulicenter.view.SpaceItemDecoration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,6 +79,7 @@ public class NewGoodsFragment extends Fragment {
         //设置是否自动修复
         rvNewGoods.setHasFixedSize(true);
         rvNewGoods.setAdapter(mAdapter);
+        rvNewGoods.addItemDecoration(new SpaceItemDecoration(12));
         mgridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -101,14 +104,26 @@ public class NewGoodsFragment extends Fragment {
         NetDao.downloadNewGoods(getContext(), Page_id, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
+                Goodsrl.setRefreshing(false);
+                tvRefresh.setVisibility(View.GONE);
+                mAdapter.setMore(true);
                 if (result!=null&&result.length>0){
                     ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
                     adapter.initData(list);
+                    if(list.size()<I.PAGE_SIZE_DEFAULT){
+                        mAdapter.setMore(false);
+                    }
+                }else{
+                    mAdapter.setMore(false);
                 }
             }
 
             @Override
             public void onError(String error) {
+                Goodsrl.setRefreshing(false);
+                tvRefresh.setVisibility(View.GONE);
+                mAdapter.setMore(false);
+                CommonUtils.showShortToast(error);
                 L.e("error"+error);
             }
         });
