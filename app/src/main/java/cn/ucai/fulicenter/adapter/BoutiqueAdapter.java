@@ -46,6 +46,10 @@ public class BoutiqueAdapter extends RecyclerView.Adapter{
         notifyDataSetChanged();
     }
 
+    public int getFooterString() {
+        return isMore?R.string.load_more:R.string.no_more;
+    }
+
     public BoutiqueAdapter(Context mContext, ArrayList<BoutiqueBean> boutiquelist) {
         this.mContext = mContext;
         this.boutiquelist = boutiquelist;
@@ -60,7 +64,7 @@ public class BoutiqueAdapter extends RecyclerView.Adapter{
         switch (viewType) {
             case I.TYPE_FOOTER:
                 layout = inflater.inflate(R.layout.item_footer, parent, false);
-                holder = new FooterViewHolder(layout);
+                holder = new GoodsAdapter.FooterViewHolder(layout);
                 break;
             case I.TYPE_ITEM:
                 layout = inflater.inflate(R.layout.item_boutique, parent, false);
@@ -83,6 +87,17 @@ public class BoutiqueAdapter extends RecyclerView.Adapter{
             boutiqueHolder.tvName.setText(boutique.getName());
             ImageLoader.downloadImg(mContext, boutiqueHolder.ivGoodsImage, boutique.getImageurl());
         }
+        if (holder instanceof GoodsAdapter.FooterViewHolder){
+            ((GoodsAdapter.FooterViewHolder)holder).tvFooter.setText(getFooterString());
+        }
+        if (holder instanceof BoutiqueViewHolder){
+            BoutiqueBean boutique = boutiquelist.get(position);
+            ((BoutiqueViewHolder)holder).tvTitle.setText(boutique.getTitle());
+            ((BoutiqueViewHolder)holder).tvDescription.setText(boutique.getDescription());
+            ((BoutiqueViewHolder)holder).tvName.setText(boutique.getName());
+            ImageLoader.downloadImg(mContext, ((BoutiqueViewHolder)holder).ivGoodsImage, boutique.getImageurl());
+        }
+
     }
 
     @Override
@@ -111,6 +126,8 @@ public class BoutiqueAdapter extends RecyclerView.Adapter{
     }
 
 
+
+
     static class FooterViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tvFooter)
         TextView tvFooter;
@@ -122,7 +139,7 @@ public class BoutiqueAdapter extends RecyclerView.Adapter{
     }
 
 
-    static class BoutiqueViewHolder extends RecyclerView.ViewHolder {
+    class BoutiqueViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.ivGoodsImage)
         ImageView ivGoodsImage;
         @Bind(R.id.tvTitle)
