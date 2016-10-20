@@ -15,7 +15,6 @@ import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.CategoryGroupBean;
-import cn.ucai.fulicenter.fragments.CategoryFragment;
 import cn.ucai.fulicenter.utils.ImageLoader;
 
 
@@ -36,23 +35,26 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     @Override
     public int getGroupCount() {
 
-        return mgroupList.size();
+        return mgroupList != null ? mgroupList.size() : 0;
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return mchildList.get(groupPosition).size();
+
+        return mchildList != null && mchildList.get(groupPosition) != null ?
+                mchildList.get(groupPosition).size() : 0;
     }
 
     @Override
     public Object getGroup(int groupPosition) {
 
-        return mgroupList.get(groupPosition);
+        return mgroupList != null ? mgroupList.get(groupPosition) : null;
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return mchildList.get(groupPosition).get(childPosition);
+        return mchildList != null && mchildList.get(groupPosition) != null ?
+                mchildList.get(groupPosition).get(childPosition) : null;
     }
 
     @Override
@@ -76,17 +78,14 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         GroupViewHolder holder = null;
         if (convertView == null) {
             convertView = View.inflate(mContext, R.layout.item_group, null);
-            holder = new GroupViewHolder();
-            holder.ivExpandImage = (ImageView) convertView.findViewById(R.id.ivExpandImage);
-            holder.ivGroupImage = (ImageView) convertView.findViewById(R.id.ivGroupImage);
-            holder.textView = (TextView) convertView.findViewById(R.id.tvGroupName);
+            holder = new GroupViewHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (GroupViewHolder) convertView.getTag();
         }
-        //holder.ivGroupImage.setImageResource(mgroupList.get(groupPosition).getId());
         ImageLoader.downloadImg(mContext, holder.ivGroupImage, mgroupList.get(groupPosition).getImageUrl());
-        holder.textView.setText(mgroupList.get(groupPosition).getName());
+        holder.tvGroupName.setText(mgroupList.get(groupPosition).getName());
+
         if (isExpanded) {//若是展开状态
             holder.ivExpandImage.setImageResource(R.mipmap.expand_off);
         } else {
@@ -101,15 +100,13 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         ChildViewHolder holder = null;
         if (convertView == null) {
             convertView = View.inflate(mContext, R.layout.item_child, null);
-            holder = new ChildViewHolder();
-            holder.ivChildIamge = (ImageView) convertView.findViewById(R.id.ivChildIamge);
-            holder.textView1 = (TextView) convertView.findViewById(R.id.tvChildName);
+            holder = new ChildViewHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (ChildViewHolder) convertView.getTag();
         }
         ImageLoader.downloadImg(mContext, holder.ivChildIamge, mchildList.get(groupPosition).get(childPosition).getImageUrl());
-        holder.textView1.setText(mchildList.get(groupPosition).get(childPosition).getName());
+        holder.tvChildName.setText(mchildList.get(groupPosition).get(childPosition).getName());
         return convertView;
     }
 
@@ -118,29 +115,28 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    public void initData(ArrayList<CategoryGroupBean> groupList) {
-        if (mgroupList != null) {
-            mgroupList.clear();
-        }
-        mgroupList.addAll(groupList);
-        notifyDataSetChanged();
-    }
 
-    public void initData1(ArrayList<CategoryChildBean> childList) {
-        if (mgroupList != null) {
-            mgroupList.clear();
-        }
-        notifyDataSetChanged();
-    }
-
-
-    class GroupViewHolder {
-        ImageView ivGroupImage, ivExpandImage;
-        TextView textView;
-    }
-
-    class ChildViewHolder {
+    static class ChildViewHolder {
+        @Bind(R.id.ivChildIamge)
         ImageView ivChildIamge;
-        TextView textView1;
+        @Bind(R.id.tvChildName)
+        TextView tvChildName;
+
+        ChildViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class GroupViewHolder {
+        @Bind(R.id.ivGroupImage)
+        ImageView ivGroupImage;
+        @Bind(R.id.tvGroupName)
+        TextView tvGroupName;
+        @Bind(R.id.ivExpandImage)
+        ImageView ivExpandImage;
+
+        GroupViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }
