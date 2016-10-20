@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rlGoodsDetails"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FFEF6526">
+
+        <ImageView
+            android:id="@+id/iamgeBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/back_nomal"
+            android:layout_marginLeft="5dp"
+            android:onClick="onClick"
+            />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true">
+            <TextView
+                android:id="@+id/tvTitles"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="美妆"
+                android:textSize="20sp"
+                android:textColor="#fff"
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                />
+            <ImageView
+                android:layout_toRightOf="@+id/tvTitles"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@mipmap/arrow2_up"
+                />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FFF08913">
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="价格"
+                android:layout_centerInParent="true"
+                android:gravity="center_vertical"
+                android:textColor="#FF0B0B0A"
+                android:textSize="20sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@mipmap/arrow_order_down"
+                android:layout_toRightOf="@+id/tvPrice"
+                android:layout_marginLeft="30dp"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="上架时间"
+                android:layout_centerInParent="true"
+                android:gravity="center_vertical"
+                android:textColor="#FF0B0B0A"
+                android:textSize="20sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@mipmap/arrow_order_up"
+                android:layout_toRightOf="@+id/tvTime"
+                android:layout_marginLeft="30dp"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>
