@@ -1,6 +1,7 @@
 package cn.ucai.fulicenter.adapter;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +13,35 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.utils.ImageLoader;
+import cn.ucai.fulicenter.utils.MFGT;
 
 
 /**
  * Created by Administrator on 2016/10/19.
  */
 public class CategoryAdapter extends BaseExpandableListAdapter {
-    Context mContext;
+    static Context mContext;
     ArrayList<CategoryGroupBean> mgroupList;
     ArrayList<ArrayList<CategoryChildBean>> mchildList;
+
+    boolean isMore;
+
+    public boolean isMore() {
+        return isMore;
+    }
+
+    public void setMore(boolean more) {
+        isMore = more;
+        notifyDataSetChanged();
+    }
+    public int getFooterString(){
+        return isMore?R.string.load_more:R.string.no_more;
+    }
 
     public CategoryAdapter(Context mContext, ArrayList<CategoryGroupBean> mgroupList, ArrayList<ArrayList<CategoryChildBean>> mchildList) {
         this.mContext = mContext;
@@ -86,6 +103,9 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         ImageLoader.downloadImg(mContext, holder.ivGroupImage, mgroupList.get(groupPosition).getImageUrl());
         holder.tvGroupName.setText(mgroupList.get(groupPosition).getName());
 
+
+        //holder.tvGroupName.setTag(mgroupList.get(groupPosition).getId());
+
         if (isExpanded) {//若是展开状态
             holder.ivExpandImage.setImageResource(R.mipmap.expand_off);
         } else {
@@ -107,12 +127,29 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         }
         ImageLoader.downloadImg(mContext, holder.ivChildIamge, mchildList.get(groupPosition).get(childPosition).getImageUrl());
         holder.tvChildName.setText(mchildList.get(groupPosition).get(childPosition).getName());
+
+        holder.tvChildName.setTag(mchildList.get(groupPosition).get(childPosition).getId());
+
         return convertView;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+
+
+    public void initData1(ArrayList<CategoryGroupBean> groupList, ArrayList<ArrayList<CategoryChildBean>> childList) {
+        if (mgroupList!=null){
+            mgroupList.clear();
+        }
+        mgroupList.addAll(groupList);
+        if (mchildList!=null){
+            mchildList.clear();
+        }
+        mchildList.addAll(childList);
+        notifyDataSetChanged();
     }
 
 
@@ -123,8 +160,15 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         TextView tvChildName;
 
         ChildViewHolder(View view) {
+
             ButterKnife.bind(this, view);
         }
+        @OnClick(R.id.tvChildName)
+        public void onClick() {
+            int child_Id = (int) tvChildName.getTag();
+            MFGT.gotoCategoryActivity((Activity) mContext,child_Id);
+        }
+
     }
 
     static class GroupViewHolder {
@@ -135,8 +179,16 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         @Bind(R.id.ivExpandImage)
         ImageView ivExpandImage;
 
+
         GroupViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+/*
+        @OnClick(R.id.tvGroupName)
+        public void onClick() {
+            int group_Id = (int) tvGroupName.getTag();
+            L.e("mama_Id:"+group_Id);
+            MFGT.gotoCategoryActivity((Activity) mContext, group_Id);
+        }*/
     }
 }

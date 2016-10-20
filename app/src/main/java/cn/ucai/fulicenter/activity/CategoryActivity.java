@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.activity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -104,13 +105,18 @@ public class CategoryActivity extends AppCompatActivity {
 
     @OnClick({R.id.tvPrice, R.id.tvTime})
     public void onClick(View view) {
+        Drawable right;
         switch (view.getId()) {
             case R.id.tvPrice:
                 if (priceAsc){
                     sortBy = I.SORT_BY_PRICE_ASC;
+                    right = getResources().getDrawable(R.mipmap.arrow_order_up);
                 }else {
                     sortBy = I.SORT_BY_PRICE_DESC;
+                    right = getResources().getDrawable(R.mipmap.arrow_order_down);
                 }
+                right.setBounds(0,0,right.getIntrinsicWidth(),right.getIntrinsicHeight());
+                //tvPrice.setCompoundDrawablesRelativeWithIntrinsicBounds(null,null,right,null);
                 priceAsc = ! priceAsc;
                 break;
             case R.id.tvTime:
