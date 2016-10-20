@@ -20,7 +20,6 @@ import cn.ucai.fulicenter.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.ConvertUtils;
-import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 
 /**
@@ -59,16 +58,15 @@ public class CategoryFragment extends Fragment {
         NetDao.downloadCategoryGroup(getContext(), new OkHttpUtils.OnCompleteListener<CategoryGroupBean[]>() {
             @Override
             public void onSuccess(CategoryGroupBean[] result) {
-                ArrayList<CategoryGroupBean> been = ConvertUtils.array2List(result);
+
                 if (result != null && result.length > 0) {
+                    ArrayList<CategoryGroupBean> been = ConvertUtils.array2List(result);
                     groupList=been;
-                    L.e("groupList:"+groupList.toString());
                     for (int i = 0; i < result.length; i++) {
                         parent_id = result[i].getId();
-                        L.e("parent_id:" + parent_id);
-                        SystemClock.sleep(1000);
-                        downloadChildlist(parent_id);
-                        L.e("childList:"+childList.toString());
+                        //SystemClock.sleep(100);
+                        childList.add(new ArrayList<CategoryChildBean>());
+                        downloadChildlist(parent_id,i);
                     }
                     initView();
                 }
@@ -82,12 +80,15 @@ public class CategoryFragment extends Fragment {
 
     }
 
-    private void downloadChildlist(int parent_id) {
+    private void downloadChildlist(int parent_id,final int index) {
         NetDao.downloadCategoryChild(getContext(), parent_id, new OkHttpUtils.OnCompleteListener<CategoryChildBean[]>() {
             @Override
             public void onSuccess(CategoryChildBean[] result) {
+                if (result != null && result.length > 0) {
                 ArrayList<CategoryChildBean> bean = ConvertUtils.array2List(result);
-                childList.add(bean);
+                //childList.add(bean);
+                    childList.set(index,bean);
+                }
             }
 
             @Override
