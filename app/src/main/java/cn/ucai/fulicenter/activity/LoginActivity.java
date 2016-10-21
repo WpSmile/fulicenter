@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.btLogin:
                 break;
             case R.id.btRegisterFree:
+                MFGT.gotoRegisterActivity(this);
                 break;
         }
     }
