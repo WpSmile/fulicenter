@@ -22,6 +22,7 @@ import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
+import cn.ucai.fulicenter.utils.ResultUtils;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -83,19 +84,27 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
-        ProgressDialog pd = new ProgressDialog(mContext);
+        final ProgressDialog pd = new ProgressDialog(mContext);
         pd.setMessage(getResources().getString(R.string.logining));
         NetDao.login(mContext, username, password, new OkHttpUtils.OnCompleteListener<Result>() {
             @Override
             public void onSuccess(Result result) {
+                pd.dismiss();
                 L.e("result="+result);
                 if (result==null){
                     CommonUtils.showLongToast(R.string.login_fail);
                 }else {
                     if (result.isRetMsg()){
-                        User user = (User) result.getRetData();
-                        L.e("user="+user);
-                        MFGT.finish(mContext);
+                        String json = result.getRetData().toString();
+                        L.e("json="+json);
+                        Result resultFromJson = ResultUtils.getResultFromJson(json, User.class);
+                        L.e("resultFromJson="+resultFromJson);
+                        String str = resultFromJson.getRetData().toString();
+                        L.e("str="+str);
+                        if (str!=null&&str.length()>0){
+                            CommonUtils.showShortToast("登陆成功");
+                        }
+                        //MFGT.finish(mContext);
                     }else {
                         if (result.getRetCode()==I.MSG_LOGIN_UNKNOW_USER){
                             CommonUtils.showLongToast(R.string.login_fail_unknow_user);
