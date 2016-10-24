@@ -13,10 +13,13 @@ import android.widget.ImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.User;
+import cn.ucai.fulicenter.dao.SharePrefrenceUtils;
+import cn.ucai.fulicenter.dao.UserDao;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.L;
@@ -86,25 +89,29 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         final ProgressDialog pd = new ProgressDialog(mContext);
         pd.setMessage(getResources().getString(R.string.logining));
-        NetDao.login(mContext, username, password, new OkHttpUtils.OnCompleteListener<Result>() {
+        pd.show();
+        NetDao.login(mContext, username, password, new OkHttpUtils.OnCompleteListener<String>() {
             @Override
-            public void onSuccess(Result result) {
-                pd.dismiss();
+            public void onSuccess(String s) {
+                Result result = ResultUtils.getResultFromJson(s, User.class);
                 L.e("result="+result);
                 if (result==null){
                     CommonUtils.showLongToast(R.string.login_fail);
                 }else {
                     if (result.isRetMsg()){
-                        String json = result.getRetData().toString();
-                        L.e("json="+json);
-                        Result resultFromJson = ResultUtils.getResultFromJson(json, User.class);
-                        L.e("resultFromJson="+resultFromJson);
-                        String str = resultFromJson.getRetData().toString();
-                        L.e("str="+str);
-                        if (str!=null&&str.length()>0){
-                            CommonUtils.showShortToast("登陆成功");
+                        User user = (User) result.getRetData();
+                        L.e("user="+user);
+                        UserDao dao = new UserDao(mContext);
+                        boolean isSuccess = dao.saveUser(user);
+                        if (isSuccess){
+                            SharePrefrenceUtils.getInstance(mContext).saveUser(user.getMuserName());
+                            FuLiCenterApplication.setUser(user);
+                            MFGT.finish(mContext);
+                            /*MFGT.gotoMainActivity(mContext,1);*/
+                        }else {
+                            CommonUtils.showLongToast(R.string.user_database_error);
                         }
-                        //MFGT.finish(mContext);
+
                     }else {
                         if (result.getRetCode()==I.MSG_LOGIN_UNKNOW_USER){
                             CommonUtils.showLongToast(R.string.login_fail_unknow_user);
@@ -115,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 }
+                pd.dismiss();
             }
 
             @Override
