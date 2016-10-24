@@ -13,7 +13,9 @@ import cn.ucai.fulicenter.activity.GoodsChildActivity;
 import cn.ucai.fulicenter.activity.LoginActivity;
 import cn.ucai.fulicenter.activity.MainActivity;
 import cn.ucai.fulicenter.activity.RegisterActivity;
+import cn.ucai.fulicenter.activity.SettingActivity;
 import cn.ucai.fulicenter.bean.CategoryChildBean;
+import cn.ucai.fulicenter.fragments.PersonalFragment;
 
 /**
  * 实现跳转
@@ -57,15 +59,11 @@ public class MFGT {
         context.overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
     }
     public static void gotoLoginActivity(Activity context){
-        startActivity(context, LoginActivity.class);
-    }
-    public static void gotoLoginActivity(Activity context,String username,String password){
         Intent intent = new Intent();
         intent.setClass(context,LoginActivity.class);
-        intent.putExtra(I.User.USER_NAME,username);
-        intent.putExtra(I.User.PASSWORD,password);
-        startActivity(context, intent);
+        startActivityForResult(context, intent,I.REQUEST_CODE_LOGIN);
     }
+
     public static void gotoRegisterActivity(Activity context){
         Intent intent = new Intent();
         intent.setClass(context,RegisterActivity.class);
@@ -75,6 +73,12 @@ public class MFGT {
     public static void startActivityForResult(Activity context,Intent intent,int requestCode){
         context.startActivityForResult(intent,requestCode);
         context.overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
+    }
+
+    public static void gotoSettingActivity(Activity context){
+        Intent intent = new Intent();
+        intent.setClass(context, SettingActivity.class);
+        startActivity(context,intent);
     }
 
 
