@@ -1,6 +1,8 @@
 package cn.ucai.fulicenter.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +16,7 @@ import butterknife.OnClick;
 import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.User;
+import cn.ucai.fulicenter.dao.SharePrefrenceUtils;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
 import cn.ucai.fulicenter.utils.MFGT;
@@ -34,6 +37,7 @@ public class PersonalDataActivity extends AppCompatActivity {
     ImageView ivAvatar;
     @Bind(R.id.tvNick)
     TextView tvNick;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +48,12 @@ public class PersonalDataActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        User user = FuLiCenterApplication.getUser();
+        user = FuLiCenterApplication.getUser();
         if (user != null) {
             ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), this, ivAvatar);
             tvNick.setText(user.getMuserNick());
+        }else {
+            finish();
         }
     }
 
@@ -61,15 +67,41 @@ public class PersonalDataActivity extends AppCompatActivity {
 
                 break;
             case R.id.rlNick:
-                CommonUtils.showLongToast("不能更改昵称!");
+                //CommonUtils.showLongToast("不能更改昵称!");
+                changeNick();
                 break;
             case R.id.rlQrcode:
                 MFGT.gotoQrcodeActivity(this);
                 break;
             case R.id.btUnLogin:
-                MFGT.gotoLoginActivity(this);
-                MFGT.finish(this);
+                loginout();
                 break;
         }
+    }
+
+    private void changeNick() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("修改昵称")
+                .setMessage("是否修改昵称?")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).show();
+    }
+
+    private void loginout() {
+        if (user!=null){
+            SharePrefrenceUtils.getInstance(this).removeUser();
+            FuLiCenterApplication.setUser(null);
+            MFGT.gotoLoginActivity(this);
+        }
+        MFGT.finish(this);
     }
 }

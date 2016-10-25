@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -32,6 +33,10 @@ public class PersonalFragment extends Fragment {
     @Bind(R.id.tvName)
     TextView tvName;
     MainActivity mContext;
+    @Bind(R.id.llAvatarAndNick)
+    LinearLayout llAvatarAndNick;
+
+    User user;
 
     public PersonalFragment() {
         // Required empty public constructor
@@ -51,11 +56,11 @@ public class PersonalFragment extends Fragment {
     }
 
     private void initData() {
-        User user = FuLiCenterApplication.getUser();
-        if (user==null){
+        user = FuLiCenterApplication.getUser();
+        if (user == null) {
             MFGT.gotoLoginActivity(mContext);
-        }else {
-            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user),mContext,ivAvatar);
+        } else {
+            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), mContext, ivAvatar);
             tvName.setText(user.getMuserNick());
         }
     }
@@ -66,7 +71,7 @@ public class PersonalFragment extends Fragment {
         ButterKnife.unbind(this);
     }
 
-    @OnClick({R.id.tvSetting, R.id.ivAvatar, R.id.tvName})
+    @OnClick({R.id.tvSetting, R.id.ivAvatar, R.id.tvName,R.id.llAvatarAndNick})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvSetting:
@@ -76,6 +81,19 @@ public class PersonalFragment extends Fragment {
                 break;
             case R.id.tvName:
                 break;
+            case R.id.llAvatarAndNick:
+                MFGT.gotoPersonalDataActivity(mContext);
+                break;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        user = FuLiCenterApplication.getUser();
+        if (user != null) {
+            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), mContext, ivAvatar);
+            tvName.setText(user.getMuserNick());
         }
     }
 }
