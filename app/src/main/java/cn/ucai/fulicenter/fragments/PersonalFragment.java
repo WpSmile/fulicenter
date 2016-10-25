@@ -70,8 +70,7 @@ public class PersonalFragment extends Fragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvSetting:
-                MFGT.gotoSettingActivity(mContext);
-                MFGT.finish(mContext);
+                MFGT.gotoPersonalDataActivity(mContext);
                 break;
             case R.id.ivAvatar:
                 break;
