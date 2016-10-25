@@ -6,11 +6,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.bean.User;
+import cn.ucai.fulicenter.utils.CommonUtils;
+import cn.ucai.fulicenter.utils.ImageLoader;
+import cn.ucai.fulicenter.utils.MFGT;
 
 public class PersonalDataActivity extends AppCompatActivity {
 
@@ -24,12 +30,25 @@ public class PersonalDataActivity extends AppCompatActivity {
     RelativeLayout rlQrcode;
     @Bind(R.id.btUnLogin)
     Button btUnLogin;
+    @Bind(R.id.ivAvatar)
+    ImageView ivAvatar;
+    @Bind(R.id.tvNick)
+    TextView tvNick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_data);
         ButterKnife.bind(this);
+        initData();
+    }
+
+    private void initData() {
+        User user = FuLiCenterApplication.getUser();
+        if (user != null) {
+            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), this, ivAvatar);
+            tvNick.setText(user.getMuserNick());
+        }
     }
 
     @OnClick({R.id.ivBack, R.id.rlUserAvatar, R.id.rlNick, R.id.rlQrcode, R.id.btUnLogin})
@@ -39,12 +58,16 @@ public class PersonalDataActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.rlUserAvatar:
+
                 break;
             case R.id.rlNick:
+                CommonUtils.showLongToast("不能更改昵称!");
                 break;
             case R.id.rlQrcode:
                 break;
             case R.id.btUnLogin:
+                MFGT.gotoLoginActivity(this);
+                MFGT.finish(this);
                 break;
         }
     }
