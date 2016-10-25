@@ -15,15 +15,19 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.fulicenter.FuLiCenterApplication;
+import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.User;
 import cn.ucai.fulicenter.dao.SharePrefrenceUtils;
+import cn.ucai.fulicenter.dao.UserDao;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
+import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
+import cn.ucai.fulicenter.utils.ResultUtils;
 
 public class PersonalDataActivity extends AppCompatActivity {
 
@@ -44,6 +48,14 @@ public class PersonalDataActivity extends AppCompatActivity {
     User user;
     EditText etChangeNick;
     PersonalDataActivity mContext;
+    @Bind(R.id.rlUserName)
+    RelativeLayout rlUserName;
+    @Bind(R.id.tvUserName)
+    TextView tvUserName;
+    @Bind(R.id.ivRightArrowIcon)
+    ImageView ivRightArrowIcon;
+    @Bind(R.id.ivqrcode)
+    ImageView ivqrcode;
 
 
     @Override
@@ -57,15 +69,14 @@ public class PersonalDataActivity extends AppCompatActivity {
 
     private void initData() {
         user = FuLiCenterApplication.getUser();
-        if (user != null) {
-            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), this, ivAvatar);
-            tvNick.setText(user.getMuserNick());
-        }else {
+        if (user == null) {
             finish();
         }
+        showInfo();
+
     }
 
-    @OnClick({R.id.ivBack, R.id.rlUserAvatar, R.id.rlNick, R.id.rlQrcode, R.id.btUnLogin})
+    @OnClick({R.id.ivBack, R.id.rlUserAvatar, R.id.rlNick, R.id.rlQrcode, R.id.btUnLogin, R.id.rlUserName})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivBack:
@@ -75,7 +86,6 @@ public class PersonalDataActivity extends AppCompatActivity {
 
                 break;
             case R.id.rlNick:
-                //CommonUtils.showLongToast("不能更改昵称!");
                 changeNick();
                 break;
             case R.id.rlQrcode:
@@ -84,7 +94,14 @@ public class PersonalDataActivity extends AppCompatActivity {
             case R.id.btUnLogin:
                 loginout();
                 break;
+            case R.id.rlUserName:
+                CommonUtils.showLongToast(R.string.username_cannot_be_modify);
+                break;
         }
+    }
+
+    @OnClick(R.id.rlUserName)
+    public void onClick() {
     }
 
     private void changeNick() {
@@ -95,7 +112,7 @@ public class PersonalDataActivity extends AppCompatActivity {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (etChangeNick.getText()!=null){
+                        if (etChangeNick.getText() != null) {
                             updateUserNick();
                         }
                     }
@@ -108,28 +125,42 @@ public class PersonalDataActivity extends AppCompatActivity {
     }
 
     private void updateUserNick() {
-        NetDao.updateNick(this, user.getMuserName(), etChangeNick.getText().toString(), new OkHttpUtils.OnCompleteListener<Result>() {
+        NetDao.updateNick(this, user.getMuserName(), etChangeNick.getText().toString(), new OkHttpUtils.OnCompleteListener<String>() {
             @Override
-            public void onSuccess(Result result) {
-                if (result!=null){
-                    SharePrefrenceUtils.getInstance(mContext).saveUser(etChangeNick.getText().toString());
-                    if (user != null) {
-                        ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user),mContext, ivAvatar);
-                        tvNick.setText(user.getMuserNick());
+            public void onSuccess(String s) {
+                Result result = ResultUtils.getResultFromJson(s, User.class);
+                L.e("result==" + result);
+                if (result == null) {
+                    CommonUtils.showLongToast(R.string.update_fail);
+                } else {
+                    if (result.isRetMsg()) {
+                        User u = (User) result.getRetData();
+                        L.e("u==" + u);
+                        UserDao dao = new UserDao(mContext);
+                        boolean isSuccess = dao.updateUser(u);
+                        if (isSuccess) {
+                            FuLiCenterApplication.setUser(u);
+                            tvNick.setText(etChangeNick.getText().toString());
+                            CommonUtils.showLongToast("昵称修改成功");
+                        } else {
+                            CommonUtils.showLongToast(R.string.user_database_error);
+                        }
+                    } else {
+                        CommonUtils.showLongToast(R.string.update_fail);
                     }
                 }
-                CommonUtils.showLongToast("昵称修改成功！");
+
             }
 
             @Override
             public void onError(String error) {
-                CommonUtils.showShortToast(error);
+                CommonUtils.showLongToast(R.string.update_fail);
             }
         });
     }
 
     private void loginout() {
-        if (user!=null){
+        if (user != null) {
             SharePrefrenceUtils.getInstance(this).removeUser();
             FuLiCenterApplication.setUser(null);
             MFGT.gotoLoginActivity(this);
@@ -137,12 +168,17 @@ public class PersonalDataActivity extends AppCompatActivity {
         MFGT.finish(this);
     }
 
-    /*@Override
+    @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    private void showInfo() {
+        user = FuLiCenterApplication.getUser();
         if (user != null) {
-            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), this, ivAvatar);
+            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), mContext, ivAvatar);
+            tvUserName.setText(user.getMuserName());
             tvNick.setText(user.getMuserNick());
         }
-    }*/
+    }
 }
