@@ -64,6 +64,7 @@ public class PersonalDataActivity extends AppCompatActivity {
                 CommonUtils.showLongToast("不能更改昵称!");
                 break;
             case R.id.rlQrcode:
+                MFGT.gotoQrcodeActivity(this);
                 break;
             case R.id.btUnLogin:
                 MFGT.gotoLoginActivity(this);
