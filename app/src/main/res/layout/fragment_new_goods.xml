@@ -6,7 +6,7 @@
     tools:context="cn.ucai.fulicenter.fragments.NewGoodsFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/srl"
+        android:id="@+id/Goodsrl"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout

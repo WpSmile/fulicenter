@@ -2,29 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:id="@+id/llNewGoods"
+    android:orientation="vertical"
+    android:background="#fff">
 
-    <ImageView
-        android:id="@+id/ivGoodsPicture"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/nopic"/>
 
-    <TextView
-        android:id="@+id/tvGoodsName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="商品名字"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="10dp"/>
-    <TextView
-        android:id="@+id/tvGoodsPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="默认价格 "
-        android:textColor="#FFDD4F24"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_below="@+id/ivGoodsPicture"/>
+        <ImageView
+            android:id="@+id/ivGoodsPicture"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/nopic"/>
+
+        <TextView
+            android:id="@+id/tvGoodsName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="商品名字"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"/>
+        <TextView
+            android:id="@+id/tvGoodsPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="默认价格 "
+            android:textColor="#FFDD4F24"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/ivGoodsPicture"/>
+
+
 
 </LinearLayout>

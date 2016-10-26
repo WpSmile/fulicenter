@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:id="@+id/rlMainData"
+    >
 
     <RelativeLayout
+        android:id="@+id/rlPersonalData"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/white">
@@ -26,6 +28,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:layout_below="@+id/rlPersonalData"
         android:id="@+id/rlUserAvatar"
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -42,8 +45,8 @@
 
         <ImageView
             android:id="@+id/ivAvatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/contactlogo"
             android:layout_toLeftOf="@+id/ivRightArrowIcon0"
             android:layout_centerVertical="true"
@@ -58,7 +61,43 @@
             android:layout_marginRight="15dp"/>
     </RelativeLayout>
     <RelativeLayout
+        android:id="@+id/rlUserName"
+        android:layout_below="@+id/rlUserAvatar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="用户名"
+            android:textSize="20sp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"/>
+
+        <ImageView
+            android:id="@+id/ivRightArrowIcon2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/right_arrow_icon"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"/>
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="a952700"
+            android:textSize="20sp"
+            android:textColor="@color/blue"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/ivRightArrowIcon2"
+            android:layout_marginRight="5dp"/>
+    </RelativeLayout>
+    <RelativeLayout
         android:id="@+id/rlNick"
+        android:layout_below="@+id/rlUserName"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/white"
@@ -81,6 +120,7 @@
             android:layout_marginRight="15dp"/>
 
         <TextView
+            android:id="@+id/tvNick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="aa"
@@ -92,6 +132,7 @@
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rlQrcode"
+        android:layout_below="@+id/rlNick"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/white"
@@ -124,5 +165,6 @@
         android:text="退出登录"
         android:textSize="20sp"
         android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
         />
-</LinearLayout>
+</RelativeLayout>

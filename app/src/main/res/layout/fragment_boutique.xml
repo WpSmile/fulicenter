@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/BoutiqueFragment"
-    tools:context="cn.ucai.fulicenter.fragments.BoutiqueFragment">
+    tools:context=".fragments.BoutiquesFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srl"

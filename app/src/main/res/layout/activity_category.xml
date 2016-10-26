@@ -18,27 +18,19 @@
             android:onClick="onClick"
             android:src="@mipmap/back_nomal" />
 
-        <RelativeLayout
+        <cn.ucai.fulicenter.view.CatChildFilterButton
+            android:id="@+id/btnCatChildFilter"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true">
-
-            <TextView
-                android:id="@+id/tvTitles"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
-                android:gravity="center_vertical"
-                android:text="美妆"
-                android:textColor="#fff"
-                android:textSize="20sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/tvTitles"
-                android:src="@mipmap/arrow2_up" />
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="55dp"
+            android:layout_marginRight="10dp"
+            android:drawableRight="@drawable/arrow2_up"
+            android:background="@null"
+            android:textColor="@color/white"
+            android:text="分类"
+            android:textSize="20sp"/>
 
     </RelativeLayout>
 

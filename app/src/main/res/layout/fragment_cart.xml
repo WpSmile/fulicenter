@@ -1,13 +1,74 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cn.ucai.fulicenter.fragments.CartFragment">
+    tools:context="cn.ucai.fulicenter.fragments.CartFragment"
+    android:orientation="vertical"
+    >
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="收藏" />
+        android:layout_height="80dp"
+        android:background="@color/white">
+        <LinearLayout
+            android:id="@+id/ll_count_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="合计:"
+                android:textSize="20sp"
+                android:textColor="@color/google_yellow"
+                />
+            <TextView
+                android:id="@+id/tv_count_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="￥1118"
+                android:textSize="20sp"
+                android:textColor="@color/google_yellow"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_save_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/ll_count_money"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="节省:"
+                android:textSize="20sp"
+                android:textColor="@color/red"
+                />
+            <TextView
+                android:id="@+id/tv_save_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="￥160"
+                android:textSize="20sp"
+                android:textColor="@color/red"
+                />
+        </LinearLayout>
 
-</FrameLayout>
+
+        <Button
+            android:id="@+id/btBuy"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/good_detail_title_bg"
+            android:text="购买"
+            android:textSize="20sp"
+            android:textColor="@color/white"/>
+    </RelativeLayout>
+
+</LinearLayout>

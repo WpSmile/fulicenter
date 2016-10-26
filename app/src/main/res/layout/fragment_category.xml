@@ -5,9 +5,12 @@
     tools:context="cn.ucai.fulicenter.fragments.CategoryFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ExpandableListView
+        android:id="@+id/elvCategory"
+        android:dividerHeight="8dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="购物车" />
+        android:layout_height="match_parent">
+
+    </ExpandableListView>
 
 </FrameLayout>

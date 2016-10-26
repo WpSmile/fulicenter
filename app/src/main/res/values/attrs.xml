@@ -7,7 +7,7 @@
     </declare-styleable>
     <declare-styleable name="FlowIndicator">
         <attr name="count" format="integer"/>
-        <attr name="r" format="dimension"/>
+        <attr name="radius" format="dimension"/>
         <attr name="space" format="dimension"/>
         <attr name="normal_color" format="color|reference"/>
         <attr name="focus_color" format="color|reference"/>

@@ -19,7 +19,6 @@
             android:src="@mipmap/back_press" />
 
         <TextView
-            android:id="@+id/tvTitles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="账户注册"
@@ -73,6 +72,7 @@
             android:layout_height="match_parent"
             android:background="#fff"
             android:hint="密码:"
+            android:inputType="textPassword"
             android:drawableRight="@drawable/icon_pwd"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -90,12 +90,13 @@
             android:layout_height="match_parent"
             android:background="#fff"
             android:hint="确认密码:"
+            android:inputType="textPassword"
             android:drawableRight="@drawable/icon_pwd"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             />
     </RelativeLayout>
-    <RelativeLayout
+   <!-- <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#fff"
@@ -111,11 +112,11 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             />
-    </RelativeLayout>
+    </RelativeLayout>-->
 
 
     <Button
-        android:id="@+id/btLogin"
+        android:id="@+id/btRegisterFree"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
