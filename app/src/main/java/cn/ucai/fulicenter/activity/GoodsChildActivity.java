@@ -28,6 +28,7 @@ import cn.ucai.fulicenter.bean.AlbumsBean;
 import cn.ucai.fulicenter.bean.GoodsDetailsBean;
 import cn.ucai.fulicenter.bean.MessageBean;
 import cn.ucai.fulicenter.bean.PropertiesBean;
+import cn.ucai.fulicenter.bean.User;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
@@ -150,7 +151,43 @@ public class GoodsChildActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.imageCollect:
-                isCollected();
+                //isCollected();
+                User user = FuLiCenterApplication.getUser();
+                if (user==null){
+                    MFGT.gotoLoginActivity(mContext);
+                }else {
+                    if (isCollected){
+                        NetDao.deleteCollect(mContext, user.getMuserName(), goodsId, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                            @Override
+                            public void onSuccess(MessageBean result) {
+                                if (result!=null&&result.isSuccess()){
+                                    isCollected=!isCollected;
+                                    updateGoodsCollectedStatus();
+                                    CommonUtils.showLongToast(result.getMsg());
+                                }
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                CommonUtils.showLongToast(error);
+                            }
+                        });
+                    }else {
+                        NetDao.addCollect(mContext, user.getMuserName(), goodsId, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                            @Override
+                            public void onSuccess(MessageBean result) {
+                                isCollected=!isCollected;
+                                updateGoodsCollectedStatus();
+                                CommonUtils.showLongToast(result.getMsg());
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                CommonUtils.showLongToast(error);
+                            }
+                        });
+                    }
+                }
                 break;
         }
     }
@@ -163,23 +200,26 @@ public class GoodsChildActivity extends AppCompatActivity {
 
     private void isCollected() {
         String name = FuLiCenterApplication.getUser().getMuserName();
-        NetDao.isCollected(mContext, name, goodsId, new OkHttpUtils.OnCompleteListener<MessageBean>() {
-            @Override
-            public void onSuccess(MessageBean result) {
-                if (result!=null&&result.isSuccess()){
-                    isCollected = true;
-                }else {
-                    isCollected = false;
+        if (name!=null) {
+            NetDao.isCollected(mContext, name, goodsId, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                @Override
+                public void onSuccess(MessageBean result) {
+                    if (result != null && result.isSuccess()) {
+                        isCollected = true;
+                    } else {
+                        isCollected = false;
+                    }
+                    updateGoodsCollectedStatus();
                 }
-                updateGoodsCollectedStatus();
-            }
 
-            @Override
-            public void onError(String error) {
-                isCollected = false;
-                updateGoodsCollectedStatus();
-            }
-        });
+                @Override
+                public void onError(String error) {
+                    isCollected = false;
+                    updateGoodsCollectedStatus();
+                }
+            });
+        }
+        updateGoodsCollectedStatus();
     }
 
     private void updateGoodsCollectedStatus() {
