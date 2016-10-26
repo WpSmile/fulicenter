@@ -21,10 +21,12 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.AlbumsBean;
 import cn.ucai.fulicenter.bean.GoodsDetailsBean;
+import cn.ucai.fulicenter.bean.MessageBean;
 import cn.ucai.fulicenter.bean.PropertiesBean;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.CommonUtils;
@@ -59,11 +61,12 @@ public class GoodsChildActivity extends AppCompatActivity {
     FlowIndicator myView;
     @Bind(R.id.tvGoodsBrief)
     TextView tvGoodsBrief;
-    @Bind(R.id.llGoodsDetails)
+
+
     int goodsId;
 
     GoodsChildActivity mContext;
-
+    boolean isCollected = false;
 
 
     @Override
@@ -146,12 +149,46 @@ public class GoodsChildActivity extends AppCompatActivity {
             case R.id.iamgeBack:
                 finish();
                 break;
+            case R.id.imageCollect:
+                isCollected();
+                break;
         }
     }
 
-    /*@OnClick(R.id.iamgeBack)
-    public void onBackClick(){
-        MFGT.finish(this);
-    }*/
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isCollected();
+    }
+
+    private void isCollected() {
+        String name = FuLiCenterApplication.getUser().getMuserName();
+        NetDao.isCollected(mContext, name, goodsId, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+            @Override
+            public void onSuccess(MessageBean result) {
+                if (result!=null&&result.isSuccess()){
+                    isCollected = true;
+                }else {
+                    isCollected = false;
+                }
+                updateGoodsCollectedStatus();
+            }
+
+            @Override
+            public void onError(String error) {
+                isCollected = false;
+                updateGoodsCollectedStatus();
+            }
+        });
+    }
+
+    private void updateGoodsCollectedStatus() {
+        if (isCollected){
+            imageCollect.setImageResource(R.mipmap.bg_collect_out);
+        }else {
+            imageCollect.setImageResource(R.mipmap.bg_collect_in);
+        }
+    }
+
 
 }
