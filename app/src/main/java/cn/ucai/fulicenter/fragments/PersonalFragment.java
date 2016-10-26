@@ -105,7 +105,7 @@ public class PersonalFragment extends Fragment {
                 MFGT.gotoPersonalDataActivity(mContext);
                 break;
             case R.id.tvCategoryGoods:
-
+                MFGT.gotoMyCollectActivity(mContext);
                 break;
             case R.id.tvtvMyStore:
                 break;

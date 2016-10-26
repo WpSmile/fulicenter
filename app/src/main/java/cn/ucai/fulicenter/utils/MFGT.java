@@ -12,6 +12,9 @@ import cn.ucai.fulicenter.activity.CategoryActivity;
 import cn.ucai.fulicenter.activity.GoodsChildActivity;
 import cn.ucai.fulicenter.activity.LoginActivity;
 import cn.ucai.fulicenter.activity.MainActivity;
+import cn.ucai.fulicenter.activity.MyCollectActivity;
+import cn.ucai.fulicenter.activity.PersonalDataActivity;
+import cn.ucai.fulicenter.activity.QrcodeActivity;
 import cn.ucai.fulicenter.activity.RegisterActivity;
 import cn.ucai.fulicenter.activity.SettingActivity;
 import cn.ucai.fulicenter.bean.CategoryChildBean;
@@ -75,11 +78,20 @@ public class MFGT {
         context.overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
     }
 
-    public static void gotoSettingActivity(Activity context){
+    public static void gotoPersonalDataActivity(Activity context){
         Intent intent = new Intent();
-        intent.setClass(context, SettingActivity.class);
+        intent.setClass(context, PersonalDataActivity.class);
         startActivity(context,intent);
     }
-
+    public static void gotoQrcodeActivity(Activity context){
+        Intent intent = new Intent();
+        intent.setClass(context, QrcodeActivity.class);
+        startActivity(context,intent);
+    }
+    public static void gotoMyCollectActivity(Activity context){
+        Intent intent = new Intent();
+        intent.setClass(context, MyCollectActivity.class);
+        startActivity(context,intent);
+    }
 
 }
