@@ -2,6 +2,7 @@ package cn.ucai.fulicenter.net;
 
 import android.content.Context;
 import android.database.CursorJoiner;
+import android.os.Message;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -133,6 +134,14 @@ public class NetDao {
                 .addParam(I.PAGE_ID,String.valueOf(pageId))
                 .addParam(I.PAGE_SIZE,String.valueOf(I.PAGE_SIZE_DEFAULT))
                 .targetClass(CollectBean[].class)
+                .execute(listener);
+    }
+    public static void deleteCollect(Context context,String username,int goodsId,OkHttpUtils.OnCompleteListener<MessageBean> listener){
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_DELETE_COLLECT)
+                .addParam(I.Collect.GOODS_ID,String.valueOf(goodsId))
+                .addParam(I.Collect.USER_NAME,username)
+                .targetClass(MessageBean.class)
                 .execute(listener);
     }
 }
