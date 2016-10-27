@@ -216,6 +216,7 @@ public class CartFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             sumPrice();
+            setCartLayout(mlist!=null&&mlist.size()>0);
         }
     }
 }
