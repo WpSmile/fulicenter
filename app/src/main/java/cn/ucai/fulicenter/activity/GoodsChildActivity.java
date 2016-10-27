@@ -1,37 +1,27 @@
 package cn.ucai.fulicenter.activity;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.AlbumsBean;
+import cn.ucai.fulicenter.bean.CartBean;
 import cn.ucai.fulicenter.bean.GoodsDetailsBean;
 import cn.ucai.fulicenter.bean.MessageBean;
-import cn.ucai.fulicenter.bean.PropertiesBean;
 import cn.ucai.fulicenter.bean.User;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.CommonUtils;
-import cn.ucai.fulicenter.utils.ImageLoader;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
@@ -79,7 +69,7 @@ public class GoodsChildActivity extends AppCompatActivity {
         goodsId = getIntent().getIntExtra(I.GoodsDetails.KEY_GOODS_ID, 0);
         L.e("details", "goodsid" + goodsId);
 
-        if (goodsId==0){
+        if (goodsId == 0) {
             finish();
         }
         mContext = this;
@@ -97,9 +87,9 @@ public class GoodsChildActivity extends AppCompatActivity {
         NetDao.downloadGoodsDetails(mContext, goodsId, new OkHttpUtils.OnCompleteListener<GoodsDetailsBean>() {
             @Override
             public void onSuccess(GoodsDetailsBean result) {
-                if (result!=null){
+                if (result != null) {
                     showGoodDetails(result);
-                }else {
+                } else {
                     finish();
                 }
             }
@@ -107,7 +97,7 @@ public class GoodsChildActivity extends AppCompatActivity {
             @Override
             public void onError(String error) {
                 finish();
-                L.e("details,error="+error);
+                L.e("details,error=" + error);
                 CommonUtils.showShortToast(error);
             }
         });
@@ -118,11 +108,11 @@ public class GoodsChildActivity extends AppCompatActivity {
         tvgoodsName.setText(details.getGoodsName());
         tvShopPrice.setText(details.getCurrencyPrice());
         tvGoodsBrief.setText(details.getGoodsBrief());
-        slideAutoLoopView.startPlayLoop(myView,getAlbumImgUrl(details),getAlbumImgCount(details));
+        slideAutoLoopView.startPlayLoop(myView, getAlbumImgUrl(details), getAlbumImgCount(details));
     }
 
     private int getAlbumImgCount(GoodsDetailsBean details) {
-        if (details.getProperties()!=null&&details.getProperties().length>0) {
+        if (details.getProperties() != null && details.getProperties().length > 0) {
             return details.getProperties()[0].getAlbums().length;
         }
         return 0;
@@ -130,10 +120,10 @@ public class GoodsChildActivity extends AppCompatActivity {
 
     private String[] getAlbumImgUrl(GoodsDetailsBean details) {
         String[] url = new String[]{};
-        if (details.getProperties()!=null&&details.getProperties().length>0){
+        if (details.getProperties() != null && details.getProperties().length > 0) {
             AlbumsBean[] albums = details.getProperties()[0].getAlbums();
             url = new String[albums.length];
-            for (int i=0;i<albums.length;i++){
+            for (int i = 0; i < albums.length; i++) {
                 url[i] = albums[i].getImgUrl();
             }
         }
@@ -153,15 +143,15 @@ public class GoodsChildActivity extends AppCompatActivity {
             case R.id.imageCollect:
                 //isCollected();
                 User user = FuLiCenterApplication.getUser();
-                if (user==null){
+                if (user == null) {
                     MFGT.gotoLoginActivity(mContext);
-                }else {
-                    if (isCollected){
+                } else {
+                    if (isCollected) {
                         NetDao.deleteCollect(mContext, user.getMuserName(), goodsId, new OkHttpUtils.OnCompleteListener<MessageBean>() {
                             @Override
                             public void onSuccess(MessageBean result) {
-                                if (result!=null&&result.isSuccess()){
-                                    isCollected=!isCollected;
+                                if (result != null && result.isSuccess()) {
+                                    isCollected = !isCollected;
                                     updateGoodsCollectedStatus();
                                     CommonUtils.showLongToast(result.getMsg());
                                 }
@@ -169,14 +159,14 @@ public class GoodsChildActivity extends AppCompatActivity {
 
                             @Override
                             public void onError(String error) {
-                                CommonUtils.showLongToast(error);
+
                             }
                         });
-                    }else {
+                    } else {
                         NetDao.addCollect(mContext, user.getMuserName(), goodsId, new OkHttpUtils.OnCompleteListener<MessageBean>() {
                             @Override
                             public void onSuccess(MessageBean result) {
-                                isCollected=!isCollected;
+                                isCollected = !isCollected;
                                 updateGoodsCollectedStatus();
                                 CommonUtils.showLongToast(result.getMsg());
                             }
@@ -189,6 +179,54 @@ public class GoodsChildActivity extends AppCompatActivity {
                     }
                 }
                 break;
+            case R.id.imageShare:
+                ShareSDK.initSDK(this);
+                OnekeyShare oks = new OnekeyShare();
+                //关闭sso授权
+                oks.disableSSOWhenAuthorize();
+
+                // title标题：微信、QQ（新浪微博不需要标题）
+                oks.setTitle("我是分享标题");  //最多30个字符
+
+                // text是分享文本：所有平台都需要这个字段
+                oks.setText("我是分享文本，啦啦啦~http://uestcbmi.com/");  //最多40个字符
+
+                // imagePath是图片的本地路径：除Linked-In以外的平台都支持此参数
+                //oks.setImagePath(Environment.getExternalStorageDirectory() + "/meinv.jpg");//确保SDcard下面存在此张图片
+
+                //网络图片的url：所有平台
+                oks.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+
+                // url：仅在微信（包括好友和朋友圈）中使用
+                oks.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情
+
+                // Url：仅在QQ空间使用
+                oks.setTitleUrl("http://www.baidu.com");  //网友点进链接后，可以看到分享的详情
+
+                // 启动分享GUI
+                oks.show(this);
+                break;
+            case R.id.imageCartSelect:
+                User u = FuLiCenterApplication.getUser();
+                CartBean cartBean = new CartBean();
+
+                NetDao.addCart(mContext, cartBean.getGoodsId(), u.getMuserName(), cartBean.getCount(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean result) {
+                        if (result != null && result.isSuccess()) {
+                            CommonUtils.showLongToast("商品添加成功");
+                            imageCartSelect.setImageResource(R.mipmap.menu_item_cart_selected);
+                        } else {
+                            CommonUtils.showLongToast(R.string.add_cart_fail);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        CommonUtils.showLongToast(R.string.add_cart_fail);
+                    }
+                });
+                break;
         }
     }
 
@@ -200,7 +238,7 @@ public class GoodsChildActivity extends AppCompatActivity {
 
     private void isCollected() {
         String name = FuLiCenterApplication.getUser().getMuserName();
-        if (name!=null) {
+        if (name != null) {
             NetDao.isCollected(mContext, name, goodsId, new OkHttpUtils.OnCompleteListener<MessageBean>() {
                 @Override
                 public void onSuccess(MessageBean result) {
@@ -223,9 +261,9 @@ public class GoodsChildActivity extends AppCompatActivity {
     }
 
     private void updateGoodsCollectedStatus() {
-        if (isCollected){
+        if (isCollected) {
             imageCollect.setImageResource(R.mipmap.bg_collect_out);
-        }else {
+        } else {
             imageCollect.setImageResource(R.mipmap.bg_collect_in);
         }
     }
