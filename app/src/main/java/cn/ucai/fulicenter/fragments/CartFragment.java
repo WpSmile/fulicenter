@@ -1,6 +1,10 @@
 package cn.ucai.fulicenter.fragments;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,6 +24,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.fulicenter.FuLiCenterApplication;
+import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.activity.MainActivity;
 import cn.ucai.fulicenter.adapter.CartAdapter;
@@ -42,6 +47,7 @@ public class CartFragment extends Fragment {
     CartAdapter mAdapter;
     MainActivity mContext;
     User user;
+    updateCartReceiver myReceiver;
 
     @Bind(R.id.tv_count_num)
     TextView tvCountNum;
@@ -99,6 +105,8 @@ public class CartFragment extends Fragment {
         rvCart.setHasFixedSize(true);
         rvCart.addItemDecoration(new SpaceItemDecoration(12));
         setCartLayout(false);
+
+        myReceiver = new updateCartReceiver();
     }
 
     private void setCartLayout(boolean hasCart) {
@@ -115,6 +123,9 @@ public class CartFragment extends Fragment {
 
     private void setOnListener() {
         setOnPullDownListener();
+        IntentFilter intentFilter = new IntentFilter(I.BROADCASE_UPDATE_CART);
+        mContext.registerReceiver(myReceiver,intentFilter);
+
     }
 
     private void setOnPullDownListener() {
@@ -141,6 +152,7 @@ public class CartFragment extends Fragment {
                     tvRefresh.setVisibility(View.GONE);
                     if (list != null && list.size() > 0) {
                         L.e("list[0]=" + list.get(0));
+                        //mlist.addAll(list);
                         mAdapter.initData(list);
                         setCartLayout(true);
                     }else {
@@ -166,6 +178,9 @@ public class CartFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        if (myReceiver!=null){
+            mContext.unregisterReceiver(myReceiver);
+        }
     }
 
     @OnClick(R.id.btBuy)
@@ -183,8 +198,8 @@ public class CartFragment extends Fragment {
                     savPrive+=getPrice(c.getGoods().getRankPrice())*c.getCount();
                 }
             }
-            tvCountNum.setText("￥"+Double.valueOf(sumPrice));
-            tvSaveNum.setText("￥"+Double.valueOf(savPrive));
+            tvCountNum.setText("￥"+Double.valueOf(savPrive));
+            tvSaveNum.setText("￥"+Double.valueOf(sumPrice-savPrive));
         }else {
             tvCountNum.setText("￥0");
             tvSaveNum.setText("￥0");
@@ -194,5 +209,13 @@ public class CartFragment extends Fragment {
     private int getPrice(String price) {
         price = price.substring(price.indexOf("￥")+1);
         return Integer.valueOf(price);
+    }
+
+    class updateCartReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            sumPrice();
+        }
     }
 }
