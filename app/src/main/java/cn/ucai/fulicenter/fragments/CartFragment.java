@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -26,9 +27,9 @@ import cn.ucai.fulicenter.bean.CartBean;
 import cn.ucai.fulicenter.bean.User;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.CommonUtils;
-import cn.ucai.fulicenter.utils.ConvertUtils;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
+import cn.ucai.fulicenter.utils.ResultUtils;
 import cn.ucai.fulicenter.view.SpaceItemDecoration;
 
 /**
@@ -59,6 +60,10 @@ public class CartFragment extends Fragment {
     SwipeRefreshLayout srl;
     @Bind(R.id.tv_refresh)
     TextView tvRefresh;
+    @Bind(R.id.tvNull)
+    TextView tvNull;
+    @Bind(R.id.layout_cart)
+    RelativeLayout layoutCart;
 
     public CartFragment() {
         // Required empty public constructor
@@ -93,6 +98,14 @@ public class CartFragment extends Fragment {
         //设置是否自动修复
         rvCart.setHasFixedSize(true);
         rvCart.addItemDecoration(new SpaceItemDecoration(12));
+        setCartLayout(false);
+    }
+
+    private void setCartLayout(boolean hasCart) {
+        layoutCart.setVisibility(hasCart?View.VISIBLE:View.GONE);
+        tvNull.setVisibility(hasCart?View.GONE:View.VISIBLE);
+        rvCart.setVisibility(hasCart?View.VISIBLE:View.GONE);
+        sumPrice();
     }
 
     private void initData() {
@@ -119,21 +132,26 @@ public class CartFragment extends Fragment {
     private void downloadCart() {
         user = FuLiCenterApplication.getUser();
         if (user != null) {
-            NetDao.findCarts(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<CartBean[]>() {
+            NetDao.findCarts(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<String>() {
                 @Override
-                public void onSuccess(CartBean[] result) {
-                    L.e("result====" + result);
+                public void onSuccess(String s) {
+                    ArrayList<CartBean> list = ResultUtils.getCartFromJson(s);
+                    L.e("result====" + list);
                     srl.setRefreshing(false);
                     tvRefresh.setVisibility(View.GONE);
-                    if (result != null && result.length > 0) {
-                        ArrayList<CartBean> list = ConvertUtils.array2List(result);
+                    if (list != null && list.size() > 0) {
+                        L.e("list[0]=" + list.get(0));
                         mAdapter.initData(list);
+                        setCartLayout(true);
+                    }else {
+                        setCartLayout(false);
                     }
 
                 }
 
                 @Override
                 public void onError(String error) {
+                    setCartLayout(false);
                     srl.setRefreshing(false);
                     tvRefresh.setVisibility(View.GONE);
                     CommonUtils.showShortToast(error);
@@ -152,5 +170,29 @@ public class CartFragment extends Fragment {
 
     @OnClick(R.id.btBuy)
     public void onClick() {
+
+    }
+
+    private void sumPrice(){
+        int sumPrice = 0;
+        int savPrive = 0;
+        if (mlist!=null&&mlist.size()>0){
+            for (CartBean c:mlist){
+                if (c.isChecked()){
+                    sumPrice+=getPrice(c.getGoods().getCurrencyPrice())*c.getCount();
+                    savPrive+=getPrice(c.getGoods().getRankPrice())*c.getCount();
+                }
+            }
+            tvCountNum.setText("￥"+Double.valueOf(sumPrice));
+            tvSaveNum.setText("￥"+Double.valueOf(savPrive));
+        }else {
+            tvCountNum.setText("￥0");
+            tvSaveNum.setText("￥0");
+        }
+    }
+
+    private int getPrice(String price) {
+        price = price.substring(price.indexOf("￥")+1);
+        return Integer.valueOf(price);
     }
 }
