@@ -50,6 +50,8 @@ public class CartFragment extends Fragment {
     User user;
     updateCartReceiver myReceiver;
 
+    int orderPrice = 0;
+
     @Bind(R.id.tv_count_num)
     TextView tvCountNum;
     @Bind(R.id.ll_count_money)
@@ -187,10 +189,17 @@ public class CartFragment extends Fragment {
 
     @OnClick(R.id.btBuy)
     public void onClick() {
-        MFGT.gotoOrderActivity(mContext);
+        if (orderPrice>0){
+            MFGT.gotoOrderActivity(mContext);
+        }else {
+            CommonUtils.showLongToast(R.string.order_nothing);
+        }
+
     }
 
     private void sumPrice(){
+        orderPrice = 0;
+
         int sumPrice = 0;
         int savPrive = 0;
         if (mlist!=null&&mlist.size()>0){
@@ -200,9 +209,12 @@ public class CartFragment extends Fragment {
                     savPrive+=getPrice(c.getGoods().getRankPrice())*c.getCount();
                 }
             }
+
+            orderPrice = savPrive;
             tvCountNum.setText("￥"+Double.valueOf(savPrive));
             tvSaveNum.setText("￥"+Double.valueOf(sumPrice-savPrive));
         }else {
+            orderPrice = 0;
             tvCountNum.setText("￥0");
             tvSaveNum.setText("￥0");
         }
