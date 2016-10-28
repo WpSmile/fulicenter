@@ -13,6 +13,7 @@ import cn.ucai.fulicenter.activity.GoodsChildActivity;
 import cn.ucai.fulicenter.activity.LoginActivity;
 import cn.ucai.fulicenter.activity.MainActivity;
 import cn.ucai.fulicenter.activity.MyCollectActivity;
+import cn.ucai.fulicenter.activity.OrderActivity;
 import cn.ucai.fulicenter.activity.PersonalDataActivity;
 import cn.ucai.fulicenter.activity.QrcodeActivity;
 import cn.ucai.fulicenter.activity.RegisterActivity;
@@ -93,5 +94,12 @@ public class MFGT {
         intent.setClass(context, MyCollectActivity.class);
         startActivity(context,intent);
     }
+    public static void gotoOrderActivity(Activity context){
+        Intent intent = new Intent();
+        intent.setClass(context, OrderActivity.class);
+        startActivity(context,intent);
+    }
+
+
 
 }

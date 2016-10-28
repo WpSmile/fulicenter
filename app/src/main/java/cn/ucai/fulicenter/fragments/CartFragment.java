@@ -33,6 +33,7 @@ import cn.ucai.fulicenter.bean.User;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.L;
+import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import cn.ucai.fulicenter.utils.ResultUtils;
 import cn.ucai.fulicenter.view.SpaceItemDecoration;
@@ -157,6 +158,7 @@ public class CartFragment extends Fragment {
                         setCartLayout(true);
                     }else {
                         setCartLayout(false);
+
                     }
 
                 }
@@ -185,7 +187,7 @@ public class CartFragment extends Fragment {
 
     @OnClick(R.id.btBuy)
     public void onClick() {
-
+        MFGT.gotoOrderActivity(mContext);
     }
 
     private void sumPrice(){
@@ -218,5 +220,11 @@ public class CartFragment extends Fragment {
             sumPrice();
             setCartLayout(mlist!=null&&mlist.size()>0);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
     }
 }
