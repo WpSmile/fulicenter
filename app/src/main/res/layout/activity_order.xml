@@ -112,4 +112,13 @@
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/tv_address"/>
     </RelativeLayout>
+    <Button
+        android:layout_marginTop="200dp"
+        android:id="@+id/bt_settlement"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/good_detail_title_bg"
+        android:text="结算"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
 </LinearLayout>
