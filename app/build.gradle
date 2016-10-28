@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "cn.ucai.fulicenter"
         minSdkVersion 17
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
@@ -44,4 +44,7 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-Core-2.7.8.jar')
     compile files('libs/ShareSDK-Wechat-Favorite-2.7.8.jar')
     compile files('libs/ShareSDK-Wechat-Moments-2.7.8.jar')
+    compile project(':lib:pingpp_one')
+    compile project(':lib:bdwallet_pay_sdk')
+    compile project(':lib:pingpp')
 }

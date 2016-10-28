@@ -9,6 +9,7 @@ import java.io.File;
 
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.BoutiqueBean;
+import cn.ucai.fulicenter.bean.CartBean;
 import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.bean.CollectBean;
@@ -143,5 +144,56 @@ public class NetDao {
                 .addParam(I.Collect.USER_NAME,username)
                 .targetClass(MessageBean.class)
                 .execute(listener);
+    }
+    public static void isCollected(Context context,String username,int goodsId,OkHttpUtils.OnCompleteListener<MessageBean> listener){
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_IS_COLLECT)
+                .addParam(I.Collect.GOODS_ID,String.valueOf(goodsId))
+                .addParam(I.Collect.USER_NAME,username)
+                .targetClass(MessageBean.class)
+                .execute(listener);
+    }
+    public static void addCollect(Context context,String username,int goodsId,OkHttpUtils.OnCompleteListener<MessageBean> listener){
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_ADD_COLLECT)
+                .addParam(I.Collect.GOODS_ID,String.valueOf(goodsId))
+                .addParam(I.Collect.USER_NAME,username)
+                .targetClass(MessageBean.class)
+                .execute(listener);
+    }
+    public static void findCarts(Context context,String username,OkHttpUtils.OnCompleteListener<String> listener){
+        OkHttpUtils<String> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_FIND_CARTS)
+                .addParam(I.Cart.USER_NAME,username)
+                .targetClass(String.class)
+                .execute(listener);
+    }
+    public static void updateCart(Context context,int id,int count,OkHttpUtils.OnCompleteListener<MessageBean> listener){
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_UPDATE_CART)
+                .addParam(I.Cart.ID,String.valueOf(id))
+                .addParam(I.Cart.COUNT,String.valueOf(count))
+                .addParam(I.Cart.IS_CHECKED,String.valueOf(I.CART_CHECKED_DEFAULT))
+                .targetClass(MessageBean.class)
+                .execute(listener);
+    }
+    public static void addCart(Context context,int goodsId,String username,int count,boolean isChecked,OkHttpUtils.OnCompleteListener<MessageBean> listener){
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_ADD_CART)
+                .addParam(I.Cart.GOODS_ID,String.valueOf(goodsId))
+                .addParam(I.Cart.USER_NAME,username)
+                .addParam(I.Cart.COUNT,String.valueOf(count))
+                .addParam(I.Cart.IS_CHECKED,String.valueOf(isChecked))
+                .targetClass(MessageBean.class)
+                .execute(listener);
+    }
+
+    public static void delCart(Context context, int id, OkHttpUtils.OnCompleteListener<MessageBean> listener) {
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_DELETE_CART)
+                .addParam(I.Cart.ID,String.valueOf(id))
+                .targetClass(MessageBean.class)
+                .execute(listener);
+
     }
 }

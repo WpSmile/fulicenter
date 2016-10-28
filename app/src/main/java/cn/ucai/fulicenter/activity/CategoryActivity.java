@@ -20,19 +20,19 @@ import butterknife.OnClick;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.adapter.GoodsAdapter;
+import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.ConvertUtils;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
+import cn.ucai.fulicenter.view.CatChildFilterButton;
 import cn.ucai.fulicenter.view.SpaceItemDecoration;
 
 public class CategoryActivity extends AppCompatActivity {
 
     @Bind(R.id.iamgeBack)
     ImageView iamgeBack;
-    @Bind(R.id.tvTitles)
-    TextView tvTitles;
     @Bind(R.id.rlGoodsDetails)
     RelativeLayout rlGoodsDetails;
     @Bind(R.id.tvPrice)
@@ -41,9 +41,11 @@ public class CategoryActivity extends AppCompatActivity {
     Button tvTime;
     @Bind(R.id.rvCategory)
     RecyclerView rvCategory;
+    @Bind(R.id.btnCatChildFilter)
+    CatChildFilterButton btnCatChildFilter;
 
     boolean addTimeAsc = false;
-    boolean priceAsc = false;
+    boolean priceAsc = true;
     int sortBy = I.SORT_BY_ADDTIME_DESC;
     int child_id;
     int pageId = 1;
@@ -52,16 +54,25 @@ public class CategoryActivity extends AppCompatActivity {
     GridLayoutManager Mymanager;
 
 
+    String groupName;
+    ArrayList<CategoryChildBean> mChildList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
         ButterKnife.bind(this);
         child_id = getIntent().getIntExtra(I.CategoryChild.CAT_ID, 0);
+        if (child_id==0){
+            finish();
+        }
+
+        groupName = getIntent().getStringExtra(I.CategoryGroup.NAME);
+        mChildList = (ArrayList<CategoryChildBean>) getIntent().getSerializableExtra(I.CategoryChild.ID);
         L.e("group_id:" + child_id);
         mList = new ArrayList<>();
         initView();
         initData();
+
 
     }
 
@@ -87,6 +98,7 @@ public class CategoryActivity extends AppCompatActivity {
                     }
                 });
 
+        btnCatChildFilter.setOnCatFilterClickListener(groupName,mChildList);
     }
 
     private void initView() {
@@ -96,6 +108,7 @@ public class CategoryActivity extends AppCompatActivity {
         rvCategory.setLayoutManager(Mymanager);
         rvCategory.setHasFixedSize(true);
         rvCategory.addItemDecoration(new SpaceItemDecoration(12));
+        btnCatChildFilter.setText(groupName);
     }
 
     @OnClick(R.id.iamgeBack)
@@ -108,23 +121,27 @@ public class CategoryActivity extends AppCompatActivity {
         Drawable right;
         switch (view.getId()) {
             case R.id.tvPrice:
-                if (priceAsc){
+                if (priceAsc) {
                     sortBy = I.SORT_BY_PRICE_ASC;
                     right = getResources().getDrawable(R.mipmap.arrow_order_up);
-                }else {
+                } else {
                     sortBy = I.SORT_BY_PRICE_DESC;
                     right = getResources().getDrawable(R.mipmap.arrow_order_down);
                 }
-                right.setBounds(0,0,right.getIntrinsicWidth(),right.getIntrinsicHeight());
-                //tvPrice.setCompoundDrawablesRelativeWithIntrinsicBounds(null,null,right,null);
-                priceAsc = ! priceAsc;
+                right.setBounds(0, 0, right.getIntrinsicWidth(), right.getIntrinsicHeight());
+                tvPrice.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, right, null);
+                priceAsc = !priceAsc;
                 break;
             case R.id.tvTime:
-                if (addTimeAsc){
-                    sortBy = I.SORT_BY_ADDTIME_ASC;
-                }else {
+                if (addTimeAsc) {
                     sortBy = I.SORT_BY_ADDTIME_DESC;
+                    right = getResources().getDrawable(R.mipmap.arrow_order_down);
+                } else {
+                    sortBy = I.SORT_BY_ADDTIME_ASC;
+                    right = getResources().getDrawable(R.mipmap.arrow_order_up);
                 }
+                right.setBounds(0, 0, right.getIntrinsicWidth(), right.getIntrinsicHeight());
+                tvTime.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, right, null);
                 addTimeAsc = !addTimeAsc;
                 break;
         }

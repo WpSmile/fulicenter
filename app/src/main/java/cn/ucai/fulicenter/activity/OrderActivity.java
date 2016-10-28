@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -11,7 +12,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pingplusplus.android.PingppLog;
+import com.pingplusplus.libone.PaymentHandler;
+import com.pingplusplus.libone.PingppOne;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,7 +38,7 @@ import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import cn.ucai.fulicenter.utils.ResultUtils;
 
-public class OrderActivity extends AppCompatActivity {
+public class OrderActivity extends AppCompatActivity implements PaymentHandler{
 
     OrderActivity mContext;
     User user = null;
@@ -35,6 +46,7 @@ public class OrderActivity extends AppCompatActivity {
     ArrayList<CartBean> mlist = null;
     int savPrive = 0;
     String[] ids = new String[]{};
+    private static String URL = "http://218.244.151.190/demo/charge";
 
     @Bind(R.id.iv_order_back)
     ImageView ivOrderBack;
@@ -71,6 +83,22 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     private void initData() {
+
+        // 设置要使用的支付方式
+        PingppOne.enableChannels(new String[]{"wx", "alipay", "upacp", "cnp", "bfb"});
+        //设置是否支持外卡支付， true：支持， false：不支持， 默认不支持外卡
+      //  PingppOne.SUPPORT_FOREIGN_CARD = true;
+        //提交数据的格式，默认格式为json
+        //PingppOne.CONTENT_TYPE = "application/x-www-form-urlencoded";
+        PingppOne.CONTENT_TYPE = "application/json";
+        //设置APP_ID和PUBLISHABLE_KEY(应用快捷支付需要)
+      /*  PingppOne.APP_ID = "Ping++ App ID";
+        PingppOne.PUBLISHABLE_KEY = "Ping++ Publishable Key";*/
+        //是否开启日志
+        PingppLog.DEBUG = true;
+
+
+
         cartIds = getIntent().getStringExtra(I.Cart.ID);
         L.e("cartIds======" + cartIds);
         user = FuLiCenterApplication.getUser();
@@ -123,6 +151,37 @@ public class OrderActivity extends AppCompatActivity {
 
     private void gotoStateMent() {
         L.e("savPrice====="+savPrive);
+
+        // 产生个订单号
+        String orderNo = new SimpleDateFormat("yyyyMMddhhmmss")
+                .format(new Date());
+
+        // 计算总金额（以分为单位）
+
+        // 构建账单json对象
+        JSONObject bill = new JSONObject();
+
+        // 自定义的额外信息 选填
+        JSONObject extras = new JSONObject();
+        try {
+            extras.put("extra1", "extra1");
+            extras.put("extra2", "extra2");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            bill.put("order_no", orderNo);
+            bill.put("amount", savPrive*100);
+            bill.put("extras", extras);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //壹收款: 创建支付通道的对话框
+        PingppOne.showPaymentChannels(getSupportFragmentManager(), bill.toString(), URL, this);
+
+
     }
 
     private void getOrderList() {
@@ -166,5 +225,17 @@ public class OrderActivity extends AppCompatActivity {
     private int getPrice(String price) {
         price = price.substring(price.indexOf("￥") + 1);
         return Integer.valueOf(price);
+    }
+
+    @Override
+    public void handlePaymentResult(Intent data) {
+        if (data != null) {
+            /**
+             * code：支付结果码  -2:服务端错误、 -1：失败、 0：取消、1：成功
+             * error_msg：支付结果信息
+             */
+            int code = data.getExtras().getInt("code");
+            String errorMsg = data.getExtras().getString("error_msg");
+        }
     }
 }

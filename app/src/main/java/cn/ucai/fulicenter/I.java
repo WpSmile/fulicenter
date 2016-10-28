@@ -17,6 +17,10 @@ public interface I {
     /** 表示列表项布局的两种类型*/
     int TYPE_ITEM=0;
     int TYPE_FOOTER=1;
+    int REQUEST_CODE_RESGITER = 101;
+    int REQUEST_CODE_LOGIN = 102;
+    int REQUEST_CODE_NICK = 103;
+    String BROADCASE_UPDATE_CART = "broadcase_update_cart";
 
     /** BeeColud APP ID */
     String BEE_COLUD_APP_ID = "3539b590-4859-4128-87a3-5fb8b86b94f6";
@@ -50,6 +54,8 @@ public interface I {
     int NEW_GOOD=0;
     int CATEGORY_GOOD=1;
     int CAT_ID=0;
+    int CART_CHECKED_DEFAULT = 0;
+
 
     interface Goods {
         String KEY_RESULT = "result";
@@ -276,6 +282,7 @@ public interface I {
     String AVATAR_TYPE_GROUP_PATH ="group_icon";//群组头像保存目录
     String AVATAR_SUFFIX_PNG=".png";//PNG图片后缀名
     String AVATAR_SUFFIX_JPG=".jpg";//JPG图片后缀名
+    String AVATAR_SUFFIX = "m_avatar_suffix";
     String QUESTION = "?";//问号
     String EQUAL = "="; //等号
     String AND = "&"; //&符号
@@ -415,5 +422,6 @@ public interface I {
     /** 下载精选首页图像的接口*/
     String DOWNLOAD_IMG_URL= I.SERVER_ROOT+
             REQUEST_DOWNLOAD_IMAGE+I.QUESTION+ IMAGE_URL+"=";
-
+    /**下载头像*/
+    String DOWNLOAD_AVATAR_URL = I.SERVER_ROOT+REQUEST_DOWNLOAD_AVATAR+I.QUESTION;
 }

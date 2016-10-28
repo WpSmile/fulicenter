@@ -135,6 +135,7 @@ public class MyCollectActivity extends AppCompatActivity {
         NetDao.downloadCollect(mContext, user.getMuserName(), pageId, new OkHttpUtils.OnCompleteListener<CollectBean[]>() {
             @Override
             public void onSuccess(CollectBean[] result) {
+                L.e("CollectBean result====="+result.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
                 tvRefresh.setVisibility(View.GONE);
                 mAdapter.setMore(true);
@@ -168,5 +169,11 @@ public class MyCollectActivity extends AppCompatActivity {
     @OnClick(R.id.iv_Back)
     public void onClick() {
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
     }
 }

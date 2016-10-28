@@ -1,41 +1,94 @@
 package cn.ucai.fulicenter.bean;
 
+import java.io.Serializable;
 import java.util.Arrays;
-import java.util.List;
 
-/**
- * Created by Administrator on 2016/10/13.
- */
-public class PropertiesBean {
+public class PropertiesBean implements Serializable {
 
-    private ColorBean colorBean;
+    private int id;
+    private int goodsId;
+    private int colorId;
+    private String colorName;
+    private String colorCode;
+    private String colorImg;
+    private String colorUrl;
+    private AlbumsBean[] albums;
 
-    private AlbumsBean[] albumsBeen;
-
-    public PropertiesBean() {
+    public int getId() {
+        return id;
     }
 
-    public ColorBean getColorBean() {
-        return colorBean;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setColorBean(ColorBean colorBean) {
-        this.colorBean = colorBean;
+    public int getGoodsId() {
+        return goodsId;
     }
 
-    public AlbumsBean[] getAlbumsBeen() {
-        return albumsBeen;
+    public void setGoodsId(int goodsId) {
+        this.goodsId = goodsId;
     }
 
-    public void setAlbumsBeen(AlbumsBean[] albumsBeen) {
-        this.albumsBeen = albumsBeen;
+    public int getColorId() {
+        return colorId;
+    }
+
+    public void setColorId(int colorId) {
+        this.colorId = colorId;
+    }
+
+    public String getColorName() {
+        return colorName;
+    }
+
+    public void setColorName(String colorName) {
+        this.colorName = colorName;
+    }
+
+    public String getColorCode() {
+        return colorCode;
+    }
+
+    public void setColorCode(String colorCode) {
+        this.colorCode = colorCode;
+    }
+
+    public String getColorImg() {
+        return colorImg;
+    }
+
+    public void setColorImg(String colorImg) {
+        this.colorImg = colorImg;
+    }
+
+    public String getColorUrl() {
+        return colorUrl;
+    }
+
+    public void setColorUrl(String colorUrl) {
+        this.colorUrl = colorUrl;
+    }
+
+    public AlbumsBean[] getAlbums() {
+        return albums;
+    }
+
+    public void setAlbums(AlbumsBean[] albums) {
+        this.albums = albums;
     }
 
     @Override
     public String toString() {
         return "PropertiesBean{" +
-                "colorBean=" + colorBean +
-                ", albumsBeen=" + Arrays.toString(albumsBeen) +
+                "id=" + id +
+                ", goodsId=" + goodsId +
+                ", colorId=" + colorId +
+                ", colorName='" + colorName + '\'' +
+                ", colorCode='" + colorCode + '\'' +
+                ", colorImg='" + colorImg + '\'' +
+                ", colorUrl='" + colorUrl + '\'' +
+                ", albums=" + Arrays.toString(albums) +
                 '}';
     }
 }

@@ -1,6 +1,5 @@
 package cn.ucai.fulicenter.activity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -93,7 +92,7 @@ public class PersonalDataActivity extends AppCompatActivity {
                 break;
             case R.id.rlUserAvatar:
                 mOnSetAvatarListener = new OnSetAvatarListener(mContext,
-                        R.id.rlMainData,user.getMuserName(),I.AVATAR_TYPE_USER_PATH);
+                        R.id.rlMainData, user.getMuserName(), I.AVATAR_TYPE_USER_PATH);
                 break;
             case R.id.rlNick:
                 changeNick();
@@ -178,7 +177,10 @@ public class PersonalDataActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        showInfo();
+
     }
+
 
     private void showInfo() {
         user = FuLiCenterApplication.getUser();
@@ -192,39 +194,44 @@ public class PersonalDataActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        L.e("onActivityResult,requestCode="+requestCode+",resultCode="+resultCode);
-        if (resultCode!=RESULT_OK){
+        L.e("onActivityResult,requestCode=" + requestCode + ",resultCode=" + resultCode);
+        if (resultCode != RESULT_OK) {
             return;
         }
-        mOnSetAvatarListener.setAvatar(requestCode,data,ivAvatar);
-        if (requestCode== I.REQUEST_CODE_NICK){
+        mOnSetAvatarListener.setAvatar(requestCode, data, ivAvatar);
+        if (requestCode == I.REQUEST_CODE_NICK) {
             CommonUtils.showLongToast(R.string.update_user_nick_success);
         }
-        if (requestCode==OnSetAvatarListener.REQUEST_CROP_PHOTO){
+        if (requestCode == OnSetAvatarListener.REQUEST_CROP_PHOTO) {
             updateAvatar();
         }
     }
 
     private void updateAvatar() {
-        File file = new File(OnSetAvatarListener.getAvatarPath(mContext,user.getMavatarPath()
-                +"/"+user.getMuserName()+I.AVATAR_SUFFIX_JPG));
-        L.e("file="+file.exists());
-        L.e("file="+file.getAbsolutePath());
-        NetDao.updateAvatar(mContext, user.getMuserName(),file, new OkHttpUtils.OnCompleteListener<String>() {
+        File file = new File(OnSetAvatarListener.getAvatarPath(mContext, user.getMavatarPath()
+                + "/" + user.getMuserName() + I.AVATAR_SUFFIX_JPG));
+        L.e("file=" + file.exists());
+        L.e("file=" + file.getAbsolutePath());
+        NetDao.updateAvatar(mContext, user.getMuserName(), file, new OkHttpUtils.OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
-                L.e("s="+s);
-                Result result = ResultUtils.getResultFromJson(s,User.class);
-                L.e("result="+result);
-                if (result==null){
+                L.e("s=" + s);
+                Result result = ResultUtils.getResultFromJson(s, User.class);
+                L.e("result=" + result);
+                if (result == null) {
                     CommonUtils.showLongToast(R.string.update_user_avatar_fail);
-                }else {
+                } else {
+                    L.e("a=========================");
                     User u = (User) result.getRetData();
-                    if (result.isRetMsg()){
+
+                    if (result.isRetMsg()) {
+                        L.e("result.isRetMsg========" + result.isRetMsg());
                         FuLiCenterApplication.setUser(u);
-                        ImageLoader.setAvatar(ImageLoader.getAvatarUrl(u),mContext,ivAvatar);
+                        ImageLoader.setAvatar(ImageLoader.getAvatarUrl(u), mContext, ivAvatar);
                         CommonUtils.showLongToast(R.string.update_user_avatar_success);
-                    }else {
+                        ImageLoader.release();
+
+                    } else {
                         CommonUtils.showLongToast(R.string.update_user_avatar_fail);
                     }
                 }
@@ -232,7 +239,7 @@ public class PersonalDataActivity extends AppCompatActivity {
 
             @Override
             public void onError(String error) {
-                L.e("error="+error);
+                L.e("error=" + error);
                 CommonUtils.showLongToast(R.string.update_user_avatar_fail);
             }
         });

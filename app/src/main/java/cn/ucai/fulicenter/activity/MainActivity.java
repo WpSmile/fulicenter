@@ -10,6 +10,7 @@ import android.widget.RadioButton;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.sharesdk.framework.ShareSDK;
 import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ShareSDK.initSDK(this);
         ButterKnife.bind(this);
         mContext = this;
         L.i("MainActivity onCreate()");
@@ -156,8 +158,8 @@ public class MainActivity extends AppCompatActivity{
         if (index==4&&FuLiCenterApplication.getUser()==null){
             index=0;
         }
-        setFragment();
-    }
+    setFragment();
+}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -168,5 +170,9 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ShareSDK.stopSDK(this);
+    }
 }

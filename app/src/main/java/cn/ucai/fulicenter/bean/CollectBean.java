@@ -1,9 +1,8 @@
 package cn.ucai.fulicenter.bean;
 
-/**
- * Created by Administrator on 2016/10/13.
- */
-public class CollectBean {
+import java.io.Serializable;
+
+public class CollectBean implements Serializable {
 
     /**
      * id : 7672
@@ -11,13 +10,13 @@ public class CollectBean {
      * goodsId : 7672
      * goodsName : 趣味煮蛋模具
      * goodsEnglishName : Kotobuki
-     * goodsThumb : http://121.197.1.20/images/201507/thumb_img/6372_thumb_G_1437108490316.jpg
-     * goodsImg : http://121.197.1.20/images/201507/1437108490034171398.jpg
+     * goodsThumb : http:121.197.1.20/images/201507/thumb_img/6372_thumb_G_1437108490316.jpg
+     * goodsImg : http:121.197.1.20/images/201507/1437108490034171398.jpg
      * addTime : 1442419200000
      */
 
     private int id;
-    private int userName;
+    private String userName;
     private int goodsId;
     private String goodsName;
     private String goodsEnglishName;
@@ -33,11 +32,11 @@ public class CollectBean {
         this.id = id;
     }
 
-    public int getUserName() {
+    public String getUserName() {
         return userName;
     }
 
-    public void setUserName(int userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
@@ -87,9 +86,6 @@ public class CollectBean {
 
     public void setAddTime(long addTime) {
         this.addTime = addTime;
-    }
-
-    public CollectBean() {
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
 
     boolean isMore;
 
+
     public boolean isMore() {
         return isMore;
     }
@@ -39,8 +41,9 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         isMore = more;
         notifyDataSetChanged();
     }
-    public int getFooterString(){
-        return isMore?R.string.load_more:R.string.no_more;
+
+    public int getFooterString() {
+        return isMore ? R.string.load_more : R.string.no_more;
     }
 
     public CategoryAdapter(Context mContext, ArrayList<CategoryGroupBean> mgroupList, ArrayList<ArrayList<CategoryChildBean>> mchildList) {
@@ -116,7 +119,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
 
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         ChildViewHolder holder = null;
         if (convertView == null) {
             convertView = View.inflate(mContext, R.layout.item_child, null);
@@ -125,10 +128,21 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         } else {
             holder = (ChildViewHolder) convertView.getTag();
         }
-        ImageLoader.downloadImg(mContext, holder.ivChildIamge, mchildList.get(groupPosition).get(childPosition).getImageUrl());
-        holder.tvChildName.setText(mchildList.get(groupPosition).get(childPosition).getName());
+        if (mchildList!=null){
+            ImageLoader.downloadImg(mContext, holder.ivChildIamge, mchildList.get(groupPosition).get(childPosition).getImageUrl());
+            holder.tvChildName.setText(mchildList.get(groupPosition).get(childPosition).getName());
+            holder.tvChildName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ArrayList<CategoryChildBean> list = mchildList.get(groupPosition);
+                    String groupName = mgroupList.get(groupPosition).getName();
+                    int child_Id = mchildList.get(groupPosition).get(childPosition).getId();
+                    MFGT.gotoCategoryActivity((Activity) mContext, child_Id, groupName, list);
+                }
+            });
+        }
 
-        holder.tvChildName.setTag(mchildList.get(groupPosition).get(childPosition).getId());
+
 
         return convertView;
     }
@@ -139,13 +153,12 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     }
 
 
-
     public void initData1(ArrayList<CategoryGroupBean> groupList, ArrayList<ArrayList<CategoryChildBean>> childList) {
-        if (mgroupList!=null){
+        if (mgroupList != null) {
             mgroupList.clear();
         }
         mgroupList.addAll(groupList);
-        if (mchildList!=null){
+        if (mchildList != null) {
             mchildList.clear();
         }
         mchildList.addAll(childList);
@@ -158,16 +171,20 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         ImageView ivChildIamge;
         @Bind(R.id.tvChildName)
         TextView tvChildName;
+        @Bind(R.id.llCategoryChild)
+        LinearLayout llCategoryChild;
 
         ChildViewHolder(View view) {
 
             ButterKnife.bind(this, view);
         }
-        @OnClick(R.id.tvChildName)
+        /*@OnClick(R.id.tvChildName)
         public void onClick() {
             int child_Id = (int) tvChildName.getTag();
-            MFGT.gotoCategoryActivity((Activity) mContext,child_Id);
-        }
+            String groupName = (String) tvChildName.getTag();
+            ArrayList<CategoryChildBean> list = (ArrayList<CategoryChildBean>) tvChildName.getTag();
+            MFGT.gotoCategoryActivity((Activity) mContext,child_Id,groupName,list);
+        }*/
 
     }
 
@@ -183,12 +200,5 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         GroupViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
-/*
-        @OnClick(R.id.tvGroupName)
-        public void onClick() {
-            int group_Id = (int) tvGroupName.getTag();
-            L.e("mama_Id:"+group_Id);
-            MFGT.gotoCategoryActivity((Activity) mContext, group_Id);
-        }*/
     }
 }

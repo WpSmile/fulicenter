@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvNull"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="购物车空空如也..."
+        android:textSize="20sp"
+        android:textColor="@color/google_yellow"
+        android:layout_marginTop="50dp"
+        android:gravity="center_horizontal"
+        />
+</LinearLayout>

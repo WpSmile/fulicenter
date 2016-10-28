@@ -26,8 +26,13 @@ import butterknife.OnClick;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.activity.GoodsChildActivity;
+import cn.ucai.fulicenter.adapter.GoodsAdapter;
+import cn.ucai.fulicenter.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
+import cn.ucai.fulicenter.net.NetDao;
+import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
+import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import cn.ucai.fulicenter.view.SpaceItemDecoration;
@@ -43,7 +48,7 @@ public class NewGoodsFragment extends Fragment {
     int mPage = 10;
     int Page_id = 1;
     //GoodsAdapter adapter;
-    NewGoodsAdapter mAdapter;
+    GoodsAdapter mAdapter;
     GridLayoutManager mgridLayoutManager;
 
     int mNewState;
@@ -67,8 +72,7 @@ public class NewGoodsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_goods, container, false);
         ButterKnife.bind(this, view);
         mNewGoodsList = new ArrayList<>();
-        //adapter = new GoodsAdapter(getActivity(), mNewGoodsList);
-        mAdapter = new NewGoodsAdapter(getContext(), mNewGoodsList);
+        mAdapter = new GoodsAdapter(getContext(), mNewGoodsList);
         Goodsrl.setColorSchemeColors(
                 getResources().getColor(R.color.google_blue),
                 getResources().getColor(R.color.google_green),
@@ -98,41 +102,10 @@ public class NewGoodsFragment extends Fragment {
         //initData();
         setListener();
 
+
         return view;
     }
 
-    /*private void initData() {
-        NetDao.downloadNewGoods(getContext(), Page_id, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
-            @Override
-            public void onSuccess(NewGoodsBean[] result) {
-                Goodsrl.setRefreshing(false);
-                tvRefresh.setVisibility(View.GONE);
-                mAdapter.setMore(true);
-                if (result!=null&&result.length>0){
-                    ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
-                    adapter.initData(list);
-                    if(list.size()<I.PAGE_SIZE_DEFAULT){
-                        mAdapter.setMore(false);
-                    }
-                }else{
-                    mAdapter.setMore(false);
-                }
-            }
-
-            @Override
-            public void onError(String error) {
-                Goodsrl.setRefreshing(false);
-                tvRefresh.setVisibility(View.GONE);
-                mAdapter.setMore(false);
-                CommonUtils.showShortToast(error);
-                L.e("error"+error);
-            }
-        });
-    }*/
-
-    /*private void initView() {
-
-    }*/
 
     private void setListener() {
         setPullDownListener();
@@ -198,24 +171,18 @@ public class NewGoodsFragment extends Fragment {
                             ArrayList<NewGoodsBean> goodslist = utils.array2List(result);
                             switch (action) {
                                 case I.ACTION_DOWNLOAD:
-                                    mAdapter.initGoods(goodslist);
-                                    mAdapter.setFooter("加载更多数据");
+                                    mAdapter.initData(goodslist);
                                     break;
                                 case I.ACTION_PULL_UP:
-                                    mAdapter.addGoods(goodslist);
+                                    mAdapter.addData(goodslist);
                                     break;
                                 case I.ACTION_PULL_DOWN:
-                                    mAdapter.initGoods(goodslist);
-                                    mAdapter.setFooter("加载更多数据");
-                                    //  mSwipeRefreshLayout.setEnabled(false);
+                                    mAdapter.initData(goodslist);
                                     Goodsrl.setRefreshing(false);
                                     tvRefresh.setVisibility(View.GONE);
                                     ImageLoader.release();
                                     break;
                             }
-                        }
-                        if (action == I.ACTION_PULL_UP) {
-                            mAdapter.setFooter("没有更多数据可加载");
                         }
                     }
 
@@ -233,145 +200,5 @@ public class NewGoodsFragment extends Fragment {
         ButterKnife.unbind(this);
     }
 
-    class NewGoodsHolder extends RecyclerView.ViewHolder {
-        ImageView mivGoodsPicture;
-        TextView mtvGoodsName, mtvGoodsPrice;
-        @Bind(R.id.llNewGoods)
-        LinearLayout llNewGoods;
-
-        public NewGoodsHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this,itemView);
-            mivGoodsPicture = (ImageView) itemView.findViewById(R.id.ivGoodsPicture);
-            mtvGoodsName = (TextView) itemView.findViewById(R.id.tvGoodsName);
-            mtvGoodsPrice = (TextView) itemView.findViewById(R.id.tvGoodsPrice);
-        }
-        @OnClick(R.id.llNewGoods)
-        public void onClick() {
-            int goodsId = (int) llNewGoods.getTag();
-            MFGT.gotoGoodsChildActivity((Activity) getContext(),goodsId);
-        }
-    }
-
-
-    class FooterHolder extends RecyclerView.ViewHolder {
-        TextView mtvFooter;
-
-
-        public FooterHolder(View itemView) {
-            super(itemView);
-
-            mtvFooter = (TextView) itemView.findViewById(R.id.tvFooter);
-        }
-    }
-
-    class NewGoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        Context context;
-        ArrayList<NewGoodsBean> newGoodsList;
-
-
-        boolean isMore;
-
-        String footer;
-        RecyclerView parent;
-
-
-        public String getFooter() {
-            return footer;
-        }
-
-        public void setFooter(String footer) {
-            this.footer = footer;
-            notifyDataSetChanged();
-        }
-
-        public boolean isMore() {
-            return isMore;
-        }
-
-        public void setMore(boolean more) {
-            this.isMore = more;
-        }
-
-
-        public void addGoods(ArrayList<NewGoodsBean> contastList) {
-            this.newGoodsList.addAll(contastList);
-            notifyDataSetChanged();
-
-
-        }
-
-        public void removeGoods(int i) {
-            newGoodsList.remove(i);
-            notifyDataSetChanged();
-        }
-
-        public void initGoods(ArrayList<NewGoodsBean> contastList) {
-            this.newGoodsList.clear();
-            this.newGoodsList.addAll(contastList);
-            notifyDataSetChanged();
-
-        }
-
-        public NewGoodsAdapter(Context context, ArrayList<NewGoodsBean> newGoodsList) {
-            this.context = context;
-            this.newGoodsList = newGoodsList;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            RecyclerView.ViewHolder holder = null;
-            this.parent = (RecyclerView) parent;
-            LayoutInflater inflater = LayoutInflater.from(context);
-
-            View layout = null;
-            switch (viewType) {
-                case I.TYPE_ITEM:
-                    layout = inflater.inflate(R.layout.item_goods, parent, false);
-                    holder = new NewGoodsHolder(layout);
-                    break;
-                case I.TYPE_FOOTER:
-                    layout = inflater.inflate(R.layout.item_footer, parent, false);
-                    holder = new FooterHolder(layout);
-                    break;
-            }
-
-            return holder;
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-            if (getItemViewType(position) == I.TYPE_FOOTER) {
-                FooterHolder footerHolder = (FooterHolder) holder;
-                footerHolder.mtvFooter.setText(footer);
-                return;
-            }
-
-            NewGoodsHolder newGoodsHolder = (NewGoodsHolder) holder;
-            NewGoodsBean goods = mNewGoodsList.get(position);
-            newGoodsHolder.mtvGoodsName.setText(goods.getGoodsName());
-            newGoodsHolder.mtvGoodsPrice.setText(goods.getCurrencyPrice());
-            ImageLoader.downloadImg(context, newGoodsHolder.mivGoodsPicture, goods.getGoodsThumb());
-
-            newGoodsHolder.llNewGoods.setTag(goods.getGoodsId());
-        }
-
-        @Override
-        public int getItemCount() {
-            return newGoodsList == null ? 1 : newGoodsList.size() + 1;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            if (position == getItemCount() - 1) {
-                return I.TYPE_FOOTER;
-            }
-            return I.TYPE_ITEM;
-        }
-
-
-
-    }
 
 }

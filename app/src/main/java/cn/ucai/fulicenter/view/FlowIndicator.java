@@ -58,7 +58,13 @@ public class FlowIndicator extends View {
         this.mFocus=focus;
         invalidate();
     }
-    
+
+    public int getmFocus() {
+        return mFocus;
+    }
+
+
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec));

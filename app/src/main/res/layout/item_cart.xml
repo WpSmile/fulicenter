@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/white">
+
+        <CheckBox
+            android:id="@+id/id_checkbox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:checked="false"
+            android:button="@drawable/checkbox_style"/>
+        <ImageView
+            android:id="@+id/iv_Goods_picture"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/nopic"
+            android:layout_toRightOf="@+id/id_checkbox1"
+            android:layout_marginLeft="10dp"
+            />
+        <TextView
+            android:id="@+id/tv_goods_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="杏仁紧油美人肤"
+            android:textSize="20sp"
+            android:textColor="@color/google_yellow"
+            android:layout_toRightOf="@+id/iv_Goods_picture"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            />
+        <ImageView
+            android:id="@+id/iv_add_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/add_cart"
+            android:layout_below="@+id/tv_goods_name"
+            android:layout_toRightOf="@+id/iv_Goods_picture"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/tv_goods_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(2)"
+            android:textColor="@color/black"
+            android:layout_toRightOf="@+id/iv_add_cart"
+            android:layout_below="@+id/tv_goods_name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"/>
+
+        <ImageView
+            android:id="@+id/iv_delete_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/del_cart"
+            android:layout_below="@+id/tv_goods_name"
+            android:layout_toRightOf="@+id/tv_goods_num"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"/>
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="￥419"
+            android:textSize="20sp"
+            android:textColor="@color/google_yellow"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
+</LinearLayout>

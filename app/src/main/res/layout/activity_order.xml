@@ -66,6 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="例：00000000000"
+            android:inputType="phone"
             android:layout_toRightOf="@+id/tv_phone_num"/>
     </RelativeLayout>
     <RelativeLayout
@@ -84,6 +85,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"/>
         <Spinner
+            android:id="@+id/sp_area"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/tv_area"
@@ -112,13 +114,46 @@
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/tv_address"/>
     </RelativeLayout>
-    <Button
+
+    <RelativeLayout
         android:layout_marginTop="200dp"
-        android:id="@+id/bt_settlement"
+        android:id="@+id/layout_order"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/good_detail_title_bg"
-        android:text="结算"
-        android:textColor="@color/white"
-        android:textSize="20sp"/>
+        android:layout_height="80dp"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true">
+        <LinearLayout
+            android:id="@+id/ll_count_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="合计:"
+                android:textSize="20sp"
+                android:textColor="@color/google_yellow"
+                />
+            <TextView
+                android:id="@+id/tv_order_count_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="￥0"
+                android:textSize="20sp"
+                android:textColor="@color/google_yellow"
+                />
+        </LinearLayout>
+        <Button
+            android:id="@+id/bt_settlement"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/good_detail_title_bg"
+            android:text="提交订单"
+            android:textSize="20sp"
+            android:textColor="@color/white"/>
+    </RelativeLayout>
+
 </LinearLayout>

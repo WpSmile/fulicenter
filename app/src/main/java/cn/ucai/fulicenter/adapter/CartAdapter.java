@@ -20,10 +20,9 @@ import butterknife.OnClick;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.CartBean;
+import cn.ucai.fulicenter.bean.GoodsDetailsBean;
 import cn.ucai.fulicenter.bean.MessageBean;
-import cn.ucai.fulicenter.fragments.CartFragment;
 import cn.ucai.fulicenter.net.NetDao;
-import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
@@ -43,13 +42,20 @@ public class CartAdapter extends RecyclerView.Adapter {
 
     }
 
+    public void initData(ArrayList<CartBean> list) {
+        if (mlist != null) {
+            mlist.clear();
+        }
+        mlist.addAll(list);
+        //mlist = list;
+        notifyDataSetChanged();
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.parent = (RecyclerView) parent;
         RecyclerView.ViewHolder holder = null;
-        View layout = null;
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        layout = inflater.inflate(R.layout.item_cart, parent, false);
+        View layout = LayoutInflater.from(mContext).inflate(R.layout.item_cart, parent, false);
         holder = new CartViewHolder(layout);
         return holder;
     }
@@ -58,13 +64,16 @@ public class CartAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         final CartBean cartBean = mlist.get(position);
+        L.e("cartBean=====" + cartBean.toString());
+        GoodsDetailsBean goods = new GoodsDetailsBean();
+
         L.e("名字：====" + cartBean.getGoods().getGoodsName());
         ((CartViewHolder) holder).tvGoodsNum.setText("(" + cartBean.getCount() + ")");
 
-        ((CartViewHolder) holder).tvGoodsName.setText(cartBean.getGoods().getGoodsName());
-        ((CartViewHolder) holder).tvprice.setText(cartBean.getGoods().getCurrencyPrice());
+        ((CartViewHolder) holder).tvGoodsName.setText(goods.getGoodsName());
+        ((CartViewHolder) holder).tvprice.setText(goods.getCurrencyPrice());
         ((CartViewHolder) holder).idCheckbox1.setChecked(cartBean.isChecked());
-        ImageLoader.downloadImg(mContext, ((CartViewHolder) holder).ivGoodsPicture, cartBean.getGoods().getGoodsThumb());
+        ImageLoader.downloadImg(mContext, ((CartViewHolder) holder).ivGoodsPicture, goods.getGoodsThumb());
         ((CartViewHolder) holder).idCheckbox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean b) {
@@ -75,21 +84,12 @@ public class CartAdapter extends RecyclerView.Adapter {
 
         ((CartViewHolder) holder).ivAddCart.setTag(position);
 
+
     }
 
     @Override
     public int getItemCount() {
         return mlist == null ? 0 : mlist.size();
-    }
-
-
-    public void initData(ArrayList<CartBean> list) {
-        if (mlist != null) {
-            mlist.clear();
-        }
-        mlist.addAll(list);
-        //mlist = list;
-        notifyDataSetChanged();
     }
 
 

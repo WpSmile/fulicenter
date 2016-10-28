@@ -1,41 +1,29 @@
 package cn.ucai.fulicenter.bean;
 
-import java.util.List;
+import java.io.Serializable;
 
-/**
- * Created by Administrator on 2016/10/13.
- */
-public class ColorBean {
-    private int id;
-    private int goodsId;
+public class ColorBean implements Serializable {
+
+    /**
+     * catId : 262
+     * colorId : 1
+     * colorName : 灰色
+     * colorCode : #959595
+     * colorImg : 121.197.1.20/images/201309/1380064809234134935.jpg
+     */
+
+    private int catId;
     private int colorId;
     private String colorName;
     private String colorCode;
     private String colorImg;
-    private String colorUrl;
-    /**
-     * pid : 7677
-     * imgId : 28296
-     * imgUrl : 201509/goods_img/7677_P_1442391216432.png
-     * thumbUrl : no_picture.gif
-     */
 
-
-
-    public int getId() {
-        return id;
+    public int getCatId() {
+        return catId;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getGoodsId() {
-        return goodsId;
-    }
-
-    public void setGoodsId(int goodsId) {
-        this.goodsId = goodsId;
+    public void setCatId(int catId) {
+        this.catId = catId;
     }
 
     public int getColorId() {
@@ -70,27 +58,14 @@ public class ColorBean {
         this.colorImg = colorImg;
     }
 
-    public String getColorUrl() {
-        return colorUrl;
-    }
-
-    public void setColorUrl(String colorUrl) {
-        this.colorUrl = colorUrl;
-    }
-
-    public ColorBean() {
-    }
-
     @Override
     public String toString() {
         return "ColorBean{" +
-                "id=" + id +
-                ", goodsId=" + goodsId +
+                "catId=" + catId +
                 ", colorId=" + colorId +
                 ", colorName='" + colorName + '\'' +
                 ", colorCode='" + colorCode + '\'' +
                 ", colorImg='" + colorImg + '\'' +
-                ", colorUrl='" + colorUrl + '\'' +
                 '}';
     }
 }

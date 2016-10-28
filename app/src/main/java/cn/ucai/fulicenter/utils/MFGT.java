@@ -94,9 +94,8 @@ public class MFGT {
         intent.setClass(context, MyCollectActivity.class);
         startActivity(context,intent);
     }
-    public static void gotoOrderActivity(Activity context){
-        Intent intent = new Intent();
-        intent.setClass(context, OrderActivity.class);
+    public static void gotoOrderActivity(Activity context,String cartIds){
+        Intent intent = new Intent(context,OrderActivity.class).putExtra(I.Cart.ID,cartIds);
         startActivity(context,intent);
     }
 
