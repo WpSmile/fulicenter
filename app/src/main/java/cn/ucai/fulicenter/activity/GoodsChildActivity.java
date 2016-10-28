@@ -207,25 +207,7 @@ public class GoodsChildActivity extends AppCompatActivity {
                 oks.show(this);
                 break;
             case R.id.imageCartSelect:
-                User u = FuLiCenterApplication.getUser();
-                CartBean cartBean = new CartBean();
-
-                NetDao.addCart(mContext, cartBean.getGoodsId(), u.getMuserName(), cartBean.getCount(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
-                    @Override
-                    public void onSuccess(MessageBean result) {
-                        if (result != null && result.isSuccess()) {
-                            CommonUtils.showLongToast("商品添加成功");
-                            imageCartSelect.setImageResource(R.mipmap.menu_item_cart_selected);
-                        } else {
-                            CommonUtils.showLongToast(R.string.add_cart_fail);
-                        }
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        CommonUtils.showLongToast(R.string.add_cart_fail);
-                    }
-                });
+                addCart();
                 break;
         }
     }
@@ -268,5 +250,28 @@ public class GoodsChildActivity extends AppCompatActivity {
         }
     }
 
+    private void addCart() {
+        User u = FuLiCenterApplication.getUser();
+        if (u!=null) {
+            NetDao.addCart(mContext, goodsId, u.getMuserName(), 1,true, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                @Override
+                public void onSuccess(MessageBean result) {
+                    if (result != null && result.isSuccess()) {
+                        CommonUtils.showLongToast(R.string.add_cart_success);
+                        //imageCartSelect.setImageResource(R.mipmap.menu_item_cart_selected);
+                    } else {
+                        CommonUtils.showLongToast(R.string.add_cart_fail);
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    CommonUtils.showLongToast(R.string.add_cart_fail);
+                }
+            });
+        }else {
+            MFGT.gotoLoginActivity(mContext);
+        }
+    }
 
 }
